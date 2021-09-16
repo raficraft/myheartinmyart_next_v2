@@ -1,0 +1,84 @@
+.card {
+  position: relative;
+  @include flex(column, nowrap, space-between, center);
+  width: 30%;
+  margin: 1rem 0;
+  padding: 1rem 1.5rem;
+  border: 1px solid black;
+  border-radius: $softRadius;
+  background-color: white;
+  transition: $softTransition;
+
+
+  &:hover{
+    transform:scale(1.05);
+  }
+
+  &_content {
+    @include flex(row, wrap, space-between, space-around);
+    width: 100%;
+    background-color: burlywood;
+
+    &-info {
+      @include flex(column, nowrap, space-around, flex-start);
+      flex: 1;
+      min-height: 100%;
+      background-color: cadetblue;
+    }
+  }
+
+  a {
+    text-decoration: underline;
+    transition: 0.3s;
+
+    &:hover {
+      font-weight: bold;
+    }
+  }
+
+  footer {
+    padding: 1rem;
+  }
+
+  .indexInfo {
+    $size: 32px;
+    position: absolute;
+    left: -16px;
+    top: calc(50% - #{$size / 2});
+    @include flex(column, rowwrap, center, center);
+    @include size($size, $size);
+    @include circle();
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgb(48, 48, 48);
+    @include text(1.2rem, 1.2rem, bold);
+  }
+
+  .btn_close-topRight {
+    $size: rem(32);
+    position: absolute;
+    right: -16px;
+    top: -16px;
+    @include flex(column, rowwrap, center, center);
+    @include size($size, $size);
+    @include circle();
+    border: 2px solid rgb(145, 145, 145);
+    background-color: #a52a2a;
+    @include text(1.2rem, 1.2rem, 500);
+    color: white;
+    transition: $softTransition;
+
+    @include on-event {
+      transform: scale(1.1) rotate(180deg);
+    }
+  }
+
+  footer{
+    @include flex(row, wrap, space-around, center);
+    background-color: chocolate;
+    width : 100%;
+
+    button{
+      padding : 0.5rem  1rem;
+    }
+  }
+}

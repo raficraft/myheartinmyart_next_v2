@@ -1,0 +1,242 @@
+.adminContent {
+  background-color: rgba(157, 218, 241, 0.6);
+  flex: 1;
+  margin-left: 1rem;
+  padding: 0 1rem;
+
+  &-loader {
+    @include flex(row, nowrap, center, center);
+  }
+
+  &-addPosts {
+    padding: 0rem 2rem;
+    position: relative;
+    @include flex(column, wrap, space-between, center);
+  }
+  &-addBlog {
+    padding: 0rem 2rem;
+    position: relative;
+    @include flex(column, wrap, space-between, center);
+  }
+
+
+
+  header {
+    @include flex(row, rowwrap, space-between, center);
+    width: 100%;
+    padding : rem(16) 0 0 0;
+
+    .inputBloc-search {
+      width: 30%;
+    }
+
+    input {
+      height: 32px;
+      border-radius: $softRadius;
+      border: none;
+      text-indent: 0.75rem;
+      width: 100%;
+    }
+  }
+}
+
+.addPosts_container {
+  @include flex(row, wrap, space-between, center);
+  align-self: stretch;
+  flex: 1;
+  padding: rem(16);
+  background-color: darkgoldenrod;
+}
+
+.paginate_container {
+  padding: 1.5rem 1rem;
+  width: 100%;
+  @include flex(row, wrap, center, center);
+
+  button {
+    $size: rem(32);
+    @include size($size, $size);
+    background-color: #ffffff;
+    @include flex(column, rowwrap, center, center);
+    color: rgb(20, 20, 20);
+    border: 2px solid black;
+    @include text(1.2rem, 1.2rem, 900);
+    transition: $softTransition;
+    margin: 0.5rem;
+    border-radius: 5px;
+
+    @include on-event {
+      transform: scale(1.1);
+    }
+  }
+}
+
+.form {
+  @include flex(row, wrap, space-between, center);
+  align-self: stretch;
+  flex: 1;
+
+  &_addPost {
+    @include flex(column, wrap, space-between, center);
+    display: flex;
+    flex: 1;
+    align-self: stretch;
+    padding: rem(16) 0;
+    margin-right: rem(32);
+  }
+
+  &_params {
+    @include flex(column, wrap, flex-start, center);
+    align-self: stretch;
+    padding: rem(16);
+    margin-left: rem(32);
+    background-color: rgb(223, 223, 223);
+    border-radius: $softRadius;
+    min-height : 60%;
+    align-self: center;
+    min-width: 232px;
+
+    footer {
+      flex: 1;
+      width: 100%;
+      @include flex(column, wrap, flex-end, center);
+
+      .submit_btn {
+        @include flex(row, wrap, space-between, center);
+        width: 100%;
+        padding: 0rem;
+        button {
+          padding: 1rem;
+        }
+      }
+    }
+  }
+
+  &_previewImage{
+    @include flex(row, wrap, space-around, flex-start);
+    width: 100%;
+    flex : 1;
+    
+    &-source{
+      @include flex(column, wrap, space-around, center);
+      
+      height: 100%;
+      padding : 0rem 2rem 0rem 1rem;
+
+      canvas#imgSrc{
+        display : flex;
+        width : 100%;
+        flex : 1;
+        background-color: rgb(146, 161, 175);
+        border : 1px solid black;
+        margin-bottom : 1rem;
+      }
+     
+    }
+
+    &-resizeControl{
+      flex : 1;
+    }
+
+    p{
+      margin-bottom: 1rem;
+    }
+
+  }
+
+  .tabs {
+    @include flex(column, wrap, flex-start, flex-start);
+    width: 100%;
+    align-self: stretch;
+    flex: 1;
+
+    &_content {
+      padding: rem(16);
+      background-color: rgba(255, 255, 255, 0.5);
+      width: 100%;
+      @include flex(column, wrap, flex-start, flex-start);
+      align-self: stretch;
+      flex: 1;
+      border-left: 1px solid $dark-grey;
+      border-right: 1px solid $dark-grey;
+      border-bottom: 1px solid $dark-grey;
+
+      &[data-show="false"] {
+        display: none;
+      }
+    }
+
+    nav {
+      display: flex;
+      width: 100%;
+    }
+    button {
+      @include flex(row, nowap, center, center);
+      display: flex;
+      flex: 1;
+      padding: 1rem;
+      @include text(1rem, 1rem, 400);
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+
+      background-color: rgba(245, 245, 245, 0.5);
+
+      &[data-current="false"] {
+        background-color: white;
+        border-bottom: 1px solid $dark-grey;
+      }
+      &[data-current="true"] {
+        border-top: 1px solid $dark-grey;
+        border-right: 1px solid $dark-grey;
+        border-left: 1px solid $dark-grey;
+      }
+    }
+  }
+}
+
+.inputBloc {
+  @include flex(column, nowrap, flex-start, flex-start);
+
+  width: 100%;
+  label {
+    margin-bottom: 1rem;
+  }
+  input,
+  textarea {
+    min-height: 48px;
+    border-radius: $softRadius;
+    border: none;
+    padding: 0.5rem 0.5rem;
+    width: 100%;
+    display: flex;
+    @include text(1rem, 1rem, 400);
+    background-color: white;
+  }
+  &-textarea {
+    flex: 1;
+
+    textarea {
+      display: flex;
+      flex: 1;
+    }
+  }
+}
+
+hr {
+  width: 100%;
+}
+
+.inputBloc {
+  width: 100%;
+  
+  margin: 1rem 0 1.5rem;
+  input {
+    width: 100%;
+  }
+}
+
+.bloc_time {
+  width: 100%;
+}
+
+

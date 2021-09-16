@@ -1,0 +1,15 @@
+.header_top{
+  display: flex;
+  justify-content: space-around;
+  padding : rem(5);
+  @include flex(row,nowrap,space-between,center);
+  padding :rem(16) rem(20);
+  width: 100%;
+
+  h1{
+    color : rgb(5, 5, 5);
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  
+}

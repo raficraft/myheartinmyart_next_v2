@@ -1,0 +1,130 @@
+.main-aside{
+  @include flex(column,nowrap, space-between, center);
+  position: fixed;
+  height: 100vh;
+  bottom : 0;
+  right : 0;  
+  z-index: 110;
+
+  transform: translate3d(200%,0,0);
+  transition : 0.5s;
+
+  background-color: rgba(255, 255, 255, 0);
+  backdrop-filter: blur(8px);
+
+  .push_social{
+    @include flex(column,nowrap, center, center);
+    flex : 1;
+  }
+
+  &[data-animate="true"]{
+    transform: translate3d(0,0,0);    
+  }
+
+  
+  nav{
+
+    @include flex(column,nowrap,space-between, center);
+    width : 100%;
+    padding : 0 4rem;
+    position : relative;
+
+    .btn-aside{
+
+     
+      min-width: 190px;
+      padding: 1rem 1rem;
+      margin : 2rem 0.5rem;      
+
+      font-size: 1.5rem;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+
+      border: none;
+      border-radius: 5rem;
+      box-shadow: 0 1px 1px 0 rgba(60, 64, 67, 0.15), 0 1px 2px 1px rgba(60, 64, 67, 0.5);
+
+      cursor: pointer;
+
+      animation-fill-mode: backwards;
+      transform:translateX(400px) rotate(-95deg);
+      animation-duration: 0.7s;
+      transition: 0.3s;
+
+      @include on-event{
+        color :rgb(26, 26, 26);
+        transform : scale(1.5)
+      }
+      
+    }   
+    .btn-blog{
+      background-color: #f8ce27;
+      transition-delay : 0.5s;
+
+  
+      &[data-animate="true"]{
+        transform: translateX(0px) rotate(-2deg);  
+      }  
+     
+    }
+
+    .btn-video{
+      background-color: #439130;
+      transition-delay : 0.4s;
+  
+      &[data-animate="true"]{
+        transform: rotate(2deg);
+      }
+    }
+  
+    .btn-art{
+      background-color: #49a7e9;
+      transition-delay : 0.3s;
+      transform:translateX(400px) rotate(95deg);
+  
+      &[data-animate="true"]{
+        transform: rotate(-2deg);
+      }
+    }
+  
+    .btn-heart{
+      background-color: #db4f11;
+      transition-delay : 0.2s;
+  
+      &[data-animate="true"]{
+        transform: rotate(2deg);
+      }
+    }
+    
+  }
+
+  .social{
+
+
+    @include flex(row,nowrap, space-around, center);
+    @include size(100%,rem(32));
+    padding : 2rem 4rem 3rem;
+    transform: translate3d(100%,0,0); 
+    transition-duration: 0.3s;
+    transition-delay : 0.5s;
+
+    &_icon{
+      @include size(2rem, 2rem);
+      border-radius: 50%;
+      background-color : rgb(255, 255, 255);
+      border : 2px solid;
+      text-align: center;
+      line-height: 2rem;
+      
+    }
+
+    &[data-animate="true"]{
+      transform: translate3d(0,0,0);
+      
+     
+    }
+    
+  }
+
+}

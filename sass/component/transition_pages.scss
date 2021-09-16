@@ -1,0 +1,25 @@
+.transition_pages{
+  position: absolute;
+  width : 100vw;
+  height: 100vh;
+  background-color: blueviolet;
+  display : flex;
+  justify-content: center;
+  align-items: center;
+  animation-name : removeItem;
+  animation-delay: 1s;
+  animation-duration: 0.6s;
+  top : 0;
+  animation-fill-mode: both;
+
+}
+
+
+@keyframes removeItem{
+
+
+  100%{
+    top : -200%;
+  }
+}
+

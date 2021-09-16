@@ -1,0 +1,114 @@
+.main {
+  display: flex;
+  position: relative;
+  min-height: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.admin_container {
+  $margin: rem(32);
+  top : 0;
+  left : 0;
+  right : 0;
+  min-height : 100%;
+  position: fixed;
+  background-color: rgba(199, 199, 199, 0.8);
+  transform: translateX(200%);
+  transition: $softTransition;
+  border-radius: $middleRadius;
+  padding: 0 rem(16);
+  display: flex;
+
+  &[data-animate="true"] {
+    transform: translateX(0);
+  }
+}
+
+.admin_left {
+  flex: 1;
+  display: flex;
+  max-width: rem(200);
+  //background-color: chocolate;
+  overflow: hidden;
+  border-radius: $softRadius;
+}
+
+.accordion {
+  @include flex(column, nowrap, center, flex-start);
+  flex: 1;
+  overflow: hidden;
+
+  &-item {
+    @include flex(column, nowrap, flex-start, flex-start);
+    background-color: green;
+    width: 100%;
+    overflow: hidden;
+    border-bottom: 1px solid white;
+  }
+
+  &-btn {
+    display: block;
+    width: 100%;
+    flex: 1;
+    background-color: brown;
+    padding: 1rem 1.2rem;
+    color: white;
+    position: relative;
+    text-transform: uppercase;
+
+    &:before {
+      $size: 1rem;
+      content: "";
+      position: absolute;
+      @include size($size, $size);
+      background-color: brown;
+      right: 20px;
+      bottom: -7px;
+      transform: rotate(45deg);
+    }
+  }
+
+  &_submenu {
+    @include flex(column, nowrap, flex-start, flex-start);
+    background-color: rgb(42, 53, 54);
+    width: 100%;
+    overflow: hidden;
+    transition: 0.5s;
+    max-height: 0;
+
+    &-item {
+      display: block;
+      padding: 1rem 1.5rem;
+      color: white;
+      font-size: 1rem;
+      margin: 0 0;
+      position: relative;
+      letter-spacing: 2px;
+      border-bottom : 1px solid rgb(145, 145, 145);
+      width : 100%;
+
+      &:hover:before {
+        opacity: 1;
+      }
+
+      &:before {
+        content: "";
+        position: absolute;
+        width: rem(8);
+        background-color: brown;
+        height: 100%;
+        left: 0;
+        top: 0;
+        transition: 0.3s;
+        opacity: 0;
+      }
+    }
+  }
+}
+
+.accordion-item:target .accordion_submenu {
+  max-height: 12rem;
+}
+
+

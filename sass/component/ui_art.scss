@@ -1,0 +1,39 @@
+// Default style of container in ./css/layout.scss
+
+.ui-art {
+  z-index: 40000;
+
+  @include flex(row, nowrap, center, center);
+
+  .ui-art_content {
+    @include flex(row, nowrap, center, center);
+    @include size(800px, 800px);
+    background-color: rgba(64, 199, 209, 0.9);
+  }
+  button {
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    color: blanchedalmond;
+    background-color: black;
+    max-height: 60px;
+    border: none;
+  }
+
+  &[data-show-ui="false"] {
+    border: 0 !important;
+    clip: rect(1px, 1px, 1px, 1px) !important; /* 1 */
+    -webkit-clip-path: inset(50%) !important;
+    clip-path: inset(50%) !important; /* 2 */
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+    white-space: nowrap !important; /* 3 */
+  }
+  &[data-show-ui="true"] {
+    background-color: rgba(139, 9, 9, 0.9) !important;
+  }
+}

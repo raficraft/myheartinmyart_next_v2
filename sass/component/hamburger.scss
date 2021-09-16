@@ -1,0 +1,67 @@
+.hamburger{
+  content : '';
+  @include size(rem(32),rem(32));
+  display: block;
+  position: relative;
+  cursor : pointer;
+  background-color: #95a5a6;
+  border-radius: 50%;
+  transition: $duration;
+  position: fixed;
+  top : 16px;
+  right : rem(20);
+  z-index: 20000;
+  border : 2px solid rgb(58, 58, 58);
+
+  span,span::before,span::after{
+    position: absolute;
+    @include size(20px,rem(2));
+    background-color: white;
+    content : ' ';       
+    pointer-events: none;  
+    top : centerAbsolute(2px);
+    left : centerAbsolute(20px);
+    display : block;    
+    transition: $duration;
+    transform-origin: 50% 50%;
+  }
+
+  span:before{
+    transform: translateY(rem(-6));      
+  }
+
+  span:after{
+    transform: translateY(rem(6));
+  }     
+ 
+  &:hover{
+
+    span::before{
+      transform: translateY(rem(-8));      
+    }
+
+    span::after{
+      transform: translateY(rem(8));
+    }  
+  }
+
+  &[data-active="true"]{
+    background-color: #d35400;
+    transform : rotate(180deg);
+
+    //Transform Hamburger To Cross
+
+    span{
+      background : transparent;
+    }
+
+    span::before{
+      transform : translateY(0) rotate(45deg);
+    }
+    span::after{
+      transform : translateY(0) rotate(-45deg);
+    }
+  }
+}      
+
+
