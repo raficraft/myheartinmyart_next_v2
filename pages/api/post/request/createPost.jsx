@@ -21,7 +21,8 @@ export default function createPost(e, fields, image, lastID) {
 
   const newID = lastID.size + 1;
   const inputs = {
-    userID: fields.userID.current.value,
+    userID: fields.userID.current,
+    activate: fields.active.current.input,
     fr: {
       title: fields.titleFR.current.input,
       content: fields.contentFR.current.input,
@@ -34,16 +35,14 @@ export default function createPost(e, fields, image, lastID) {
     },
   };
 
-  console.log(inputs);
-  
-  //Brut data to article
+  console.log("controls input ", inputs.activate.checked);
+
+  //Brut data to article collection
   const newPost = {
-    userID: inputs.userID,
+    userID: inputs.userID.value,
     id: newID,
-    uploadDir: `/assets/blog/posts/${newID}`,
-    img_filename: image.name,
-    imageBase64: image.imageBase64,
-    timestamp : timetopublish
+    activate: inputs.activate.checked,
+    timestamp: timestampTopublish,
     fr: {
       title: inputs.fr.title.value,
       post: inputs.fr.content.value,
@@ -54,6 +53,35 @@ export default function createPost(e, fields, image, lastID) {
     },
   };
 
+  //Read collections Posts
+  //if not exist
+  //create
+  //write strucutre collection
+  //return collections
+  //Push collection post
+
+  //Read collections images_to_posts
+  //if not exist
+  //create
+  //write strucutre collection
+  //return collections
+  //Push collections image_to_post
+
+  /* fetch("/api/post", {
+    method: "GET",
+    body: JSON.stringify(newPost),
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  })
+    .then((r) => r.json())
+    .then((result) => {
+      console.log("push json", result);
+      return result;
+    });*/
+
+  //Call APi to add Post
   fetch("/api/post", {
     method: "POST",
     body: JSON.stringify(newPost),
@@ -68,6 +96,11 @@ export default function createPost(e, fields, image, lastID) {
       return result;
     });
 
-  return null;
+  //Call Api to add image associate with post in disitnct library
 
+  /*    uploadDir: `/assets/blog/posts/${newID}`,
+    img_filename: image.name,
+    imageBase64: image.imageBase64, */
+
+  return null;
 }

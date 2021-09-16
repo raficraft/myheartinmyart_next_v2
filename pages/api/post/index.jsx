@@ -9,46 +9,92 @@ import path from "path";
  * @param {*} res
  */
 
-export default function handler(req, res) {
-  //Get Colllection file
-  const filePath = path.join(process.cwd(), "data", "blog.json");
-  const fileData = fs.readFileSync(filePath);
-  const data = JSON.parse(fileData);
+ const collectionIfExist = async (params) => {
+   const collectionDir = params.dir;
 
-  if (req.method === "GET") {
-    res.status(200).json(data);
-  } else if (req.method === "POST") {
-    const timePost = new Date();
+   console.log("yolo");
 
+   fs.mkdir(collectionDir, { recursive: true }, (err) => {
+     console.log(err);
 
-    const newPost = {
-      userID: parseInt(req.body.userID, 10),
-      id: req.body.id,
-      img_filename: req.body.img_filename,
-      imageBase64: req.body.imageBase64,
-      uploadDir: req.body.uploadDir,
-      active: true,
-      day: timePost.getDay(),
-      publish_date_fr: date_fr,
-      publish_date_en: date_en,
-      update_date: false,
-      placeholder_img: false,
-      placeholder_img_alt: "default image",
-      fr: {
-        title: req.body.fr.title,
-        post: req.body.fr.post,
-        comment: [],
-      },
-      en: {
-        title: req.body.en.title,
-        post: req.body.en.post,
-        comment: [],
-      },
-    };
+     const structure = [
+       {
+         collection: params.collectionName,
+         timeStamp: Date.now(),
+         [params.collectionName]: [],
+       },
+     ];
+     const filePath = `${params.dir}/${params.collectionName}.json`;
 
-    data.push(newPost);
-    fs.writeFileSync(filePath, JSON.stringify(data));
+     try {
+       if (fs.existsSync(filePath)) {
+         console.log("The file exists.");
+       } else {
+         fs.writeFile(filePath, JSON.stringify(structure));
+       }
+     } catch (err) {
+       console.error(err);
+     }
+   });
+ };
 
-    res.status(201).json({ message: "Article ajouté", result: data });
-  }
-}
+ const getCollection = async (params) => {
+   const filePath = path.join(
+     process.cwd(),
+     `${params.dir}`,
+     `${params.collectionName}.json`
+   );
+
+   const fileData = fs.readFileSync(filePath);
+   const data = JSON.parse(fileData);
+   return data;
+ };
+
+ export default function handler(req, res) {
+   const params = {
+     dir: `pages/api/data/blog`,
+     collectionName: "posts",
+   };
+
+   collectionIfExist(params);
+   // const data = getCollection(params);
+
+   const filePath = path.join(
+     process.cwd(),
+     "pages/api/data/blog/",
+     "posts.json"
+   );
+   const fileData = fs.readFileSync(filePath);
+   const data = JSON.parse(fileData);
+
+   if (req.method === "GET") {
+     res.status(200).json(data);
+   } else if (req.method === "POST") {
+     const test = process.cwd();
+
+     const newPost = {
+       userID: parseInt(req.body.userID, 10),
+       id: parseInt(req.body.id),
+       activate: req.body.activate,
+       timeStamp: req.body.timestamp,
+       update_date: false,
+       fr: {
+         title: req.body.fr.title,
+         post: req.body.fr.post,
+         comment: [],
+       },
+       en: {
+         title: req.body.en.title,
+         post: req.body.en.post,
+         comment: [],
+       },
+     };
+
+     data.push(newPost);
+     fs.writeFileSync(filePath, JSON.stringify(data));
+
+     res
+       .status(201)
+       .json({ message: "Article ajouté", result: data, console: { test } });
+   }
+ }
