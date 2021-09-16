@@ -35,13 +35,15 @@ export default function createPost(e, fields, image, lastID) {
   };
 
   console.log(inputs);
-
+  
+  //Brut data to article
   const newPost = {
     userID: inputs.userID,
     id: newID,
     uploadDir: `/assets/blog/posts/${newID}`,
     img_filename: image.name,
     imageBase64: image.imageBase64,
+    timestamp : timetopublish
     fr: {
       title: inputs.fr.title.value,
       post: inputs.fr.content.value,
@@ -66,20 +68,6 @@ export default function createPost(e, fields, image, lastID) {
       return result;
     });
 
-  //OlD file uplaod
-  //Remove because , i can just upload the original files and not canvas resize.
-  //console.log("result Post New Blog Post", fetchPostData);
-  /*
-  const body = new FormData();
-  body.append("file", image);
-
-  fetch(`/api/post/file/${newID}`, {
-    method: "POST",
-    body,
-  })
-    .then((r) => r.json())
-    .then((result) => {
-      console.log("file", result);
-    });*/
   return null;
+
 }

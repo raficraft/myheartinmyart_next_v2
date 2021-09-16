@@ -20,8 +20,6 @@ export default function handler(req, res) {
   } else if (req.method === "POST") {
     const timePost = new Date();
 
-    const date_fr = `${timePost.getDate()}-${timePost.getMonth()}-${timePost.getFullYear()}`;
-    const date_en = `${timePost.getMonth()}-${timePost.getDate()}-${timePost.getFullYear()}`;
 
     const newPost = {
       userID: parseInt(req.body.userID, 10),
@@ -30,7 +28,6 @@ export default function handler(req, res) {
       imageBase64: req.body.imageBase64,
       uploadDir: req.body.uploadDir,
       active: true,
-      timestamp: Date.now(),
       day: timePost.getDay(),
       publish_date_fr: date_fr,
       publish_date_en: date_en,
