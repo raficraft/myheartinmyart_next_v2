@@ -246,7 +246,6 @@ export default function AddPost(props) {
                         onMouseUp: uploadToClient,
                         onChange: (e) => handleChange_Axis(e, "x"),
                         value: inputRange.x,
-                        required: "required",
                       }}
                       ref={canvasRef.resize_axeX}
                     />
@@ -267,6 +266,7 @@ export default function AddPost(props) {
                         required: "required",
                       }}
                       ref={canvasRef.resize_axeY}
+                      controled="false"
                     />
                   )}
                 </div>

@@ -8,15 +8,19 @@ import path from "path";
  * @param {*} res
  */
 
-export default function handler(req, res) {
 
-  const filePath = path.join(process.cwd(), "data", "blog.json");
+
+export default function handler(req, res) {
+  const filePath = path.join(
+    process.cwd(),
+    "pages/api/data/blog/",
+    "posts.json"
+  );
   const fileData = fs.readFileSync(filePath);
   const data = JSON.parse(fileData);
   const { pid } = req.query;
-  const idKey = pid - 1;
-  const currentPost = data.filter((post) => post.id === parseInt(pid));
-  const timePost = new Date();
+  const currentPost = data[0].posts.filter((post) => post.id === parseInt(pid));
+  const reqBody = req.body;
 
   switch (req.method) {
     case "GET":
@@ -25,65 +29,30 @@ export default function handler(req, res) {
       break;
 
     case "PUT":
-      switch (req.body.action) {
-        case "update_specific":
-          const newPost = {
-            userID: req.body.userID,
-            id: req.body.id,
-            img_filename: req.body.img_filename,
-            uploadDir: req.body.uploadDir,
-            active: true,
-            timestamp: Date.now(),
-            day: timePost.getDay(),
-            publish_date_fr: currentPost[0].publish_date_fr,
-            publish_date_en: currentPost[0].publish_date_en,
-            update_date: Date.now(),
-            placeholder_img: false,
-            placeholder_img_alt: "default image",
-            fr: {
-              title: req.body.fr.title,
-              post: req.body.fr.post,
-              comment: [],
-            },
-            en: {
-              title: "",
-              post: "",
-              comment: [],
-            },
-          };
+      switch (reqBody.action) {
+        case "alterateEntrie":
+          const idKey = parseInt(pid);
+          const newVal = reqBody.value;
+          currentPost[0][reqBody.fields] = newVal;
 
-          data.splice(idKey, 1, newPost);
+          data[0].posts.splice(idKey, 1, currentPost[0]);
           fs.writeFileSync(filePath, JSON.stringify(data));
 
-          const updatePost = data.filter((post) => post.id === parseInt(pid));
           res.status(201).json({
             error: null,
             message: "Article modifié avec succès",
-            data: updatePost,
-            console: {},
+            console: {
+              reqBody,
+              idKey,
+              currentPost,
+              gnak: currentPost[0],
+              newVal,
+            },
           });
 
           break;
 
-        case "toggleLockPost":
-          currentPost[0].active = !currentPost[0].active;
-
-          data.splice(idKey, 1, currentPost[0]);
-          fs.writeFileSync(filePath, JSON.stringify(data));
-
-          const updateLockPost = data.filter(
-            (post) => post.id === parseInt(pid)
-          );
-
-          res.status(201).json({
-            error: null,
-            message: "Article désactivé avec succès",
-            data: updateLockPost,
-            console: {
-              currentPost: currentPost[0],
-            },
-          });
-
+        case "repost":
           break;
       }
 

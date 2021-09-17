@@ -11,7 +11,11 @@ export default function AdminBlog() {
   useEffect(() => {
     switch (params.adminSubMenu) {
       case "addPost":
-        setAdminContent(<AddPost title="Nouveau billet de blog" />);
+        setAdminContent(<AddPost title="Nouveau billet de blog" method="addPost"/>);
+        break;
+
+      case "editPost":
+        setAdminContent(<AddPost title="Modification d'un billet de blog" method="editPost"/>);
         break;
 
       default:

@@ -19,7 +19,12 @@ export default function ListingPosts(props) {
 
   const createListing = (posts, page) => {
     return posts[page].map((post, key) => {
-      return <AdminCardListing key={`card_${key}`} {...post} />;
+     if (typeof post.activate === "boolean") {
+       return <AdminCardListing key={`card_${key}`} {...post} />;
+     } else {
+       return;
+     }
+      
     });
   };
 

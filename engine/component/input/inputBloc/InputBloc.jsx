@@ -1,5 +1,6 @@
 import React, { useRef, useImperativeHandle, forwardRef } from "react";
 import { validInput } from "../../../utils/js/form/validInput";
+import manageLocalStorage from "../../../utils/js/manageLocalStorage/manageLocalStorage";
 import { debounce } from "./../../../utils/js/tools";
 
 //forwardRef => pass refs from child to parent
@@ -9,10 +10,22 @@ export let InputBloc = (props, ref) => {
   const inputRef = useRef();
   const errorMessage = useRef(null);
 
-  const controlCapture = debounce(() => {
+  const controlCapture = debounce((params) => {
     console.log("control capture");
     console.log(validInput(ref));
     errorMessage.current.textContent = validInput(ref);
+
+    //Break 17/09/21 23h
+    // Essayez d'excuter plusieurs fonctions dans un seul
+    // handle
+    // ManageLocalStorage à remonté dans addBlog
+    // Pour gérer la sauvegarde de saisie des données
+
+    manageLocalStorage({
+      collection: params.collection,
+      value: params.value,
+      fields: params.fields,
+    });
   }, 300);
 
   useImperativeHandle(ref, () => ({
@@ -83,7 +96,7 @@ export let InputBloc = (props, ref) => {
               {...createAttr(props.attr)}
               type={type}
               ref={inputRef}
-              onChange={controlCapture}
+              onKeyUp={controlCapture}
               data-format={props.format}
             />
           );

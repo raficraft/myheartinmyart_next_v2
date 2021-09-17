@@ -42,7 +42,7 @@ export default function handler(req, res) {
       },
       height: req.body.height,
       imagePath: req.body.imagePath,
-      timeStamp: req.body.timestamp,
+      timestamp: req.body.timestamp,
       uploadDir: req.body.uploadDir,
       update_date: false,
       width: req.body.width,
