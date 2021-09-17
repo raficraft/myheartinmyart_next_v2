@@ -1,19 +1,7 @@
 [
   {
-    "userID": 1,
-    "id": 14,
-    "activate": true,
-    "update_date": false,
-    "fr": { "title": "test", "post": "fjjskljdkljskljk", "comment": [] },
-    "en": { "title": "test", "post": "jkcjskjklqjskl", "comment": [] }
-  },
-  {
-    "userID": 1,
-    "id": 2,
-    "activate": true,
-    "timeStamp": 1631788907781,
-    "update_date": false,
-    "fr": { "title": "mlkmklmlklm", "post": "klklmklmk", "comment": [] },
-    "en": { "title": "klmklmklmk", "post": "lklmklmklmklm", "comment": [] }
+    "collection": "posts",
+    "timeStamp": 1631798875192,
+    "posts": []
   }
 ]

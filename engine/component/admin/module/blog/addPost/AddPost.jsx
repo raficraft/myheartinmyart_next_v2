@@ -10,6 +10,13 @@ import { debounce } from "../../../../../utils/js/tools";
 export default function AddPost(props) {
   const [posts, setPosts, loading, params] = useGetAllPosts({});
 
+  useEffect(() => {
+    setNewID(params);
+  }, []);
+
+  const maxFileSize = 5000000;
+  const authFormat = ["jpeg", "png", "bmp", "tiff"];
+
   const newPostRef = {
     userID: useRef(),
     titleFR: useRef(),
@@ -21,8 +28,8 @@ export default function AddPost(props) {
     minutes: useRef(),
     file: useRef(),
     active: useRef(),
-    image_desc_FR: useRef(),
-    image_desc_EN: useRef(),
+    alt_FR: useRef(),
+    alt_EN: useRef(),
   };
 
   const canvasRef = {
@@ -31,17 +38,27 @@ export default function AddPost(props) {
     canvas: useRef(),
     source: useRef(),
   };
-  // state à mettre en value utilié un handle change
   const [inputRange, setInputRange] = useState({
     x: 0,
     y: 0,
   });
 
+  const handleChange_Axis = (e, axis) => {
+    if (axis === "x") {
+      setInputRange({ x: e.target.value });
+    } else {
+      setInputRange({ y: e.target.value });
+    }
+  };
+
   const [newID, setNewID] = useState({});
   const [imageUpload, setImageUpload] = useState({
     imageBase64: "",
     imageName: "",
+    width: 0,
+    height: 0,
   });
+
   const [canvasPreview, setCanvasPreview] = useState({
     width: 0,
     height: 0,
@@ -51,30 +68,16 @@ export default function AddPost(props) {
     height: 0,
   });
 
-  const [imageSrc, setImageSrc] = useState({
-    width: 0,
-    height: 0,
-  });
+  const uploadToClient = debounce((e) => {
+    const file = newPostRef.file.current.files[0];
+    const fileType = file.type.split("/")[1];
 
-  useEffect(() => {
-    setNewID(params);
-  }, []);
+    if (e.target.name === "postImage") {
+      setInputRange({ x: 0, y: 0 });
+    }
 
-  const resizeImage = debounce((e) => {
-    console.log("ultimate : ", newPostRef.file.current.files[0]);
-    const [troplol] = blogPreview(
-      newPostRef.file.current.files[0],
-      canvasRef,
-      setImageSrc
-    );
-  }, 300);
-
-  const uploadToClient = (e) => {
-    // check and source newPostRef.file.current.files[0]);
-    //conditionnal to set range
-    if (e.target.files && e.target.files[0]) {
-      console.log("file input", e.target.files[0]);
-      const uploadImage = e.target.files[0];
+    if (file && file.size < maxFileSize && authFormat.includes(fileType)) {
+      const uploadImage = newPostRef.file.current.files[0];
       blogPreview(uploadImage, canvasRef, setImageUpload);
 
       setCanvasPreview({
@@ -86,11 +89,15 @@ export default function AddPost(props) {
         width: canvasRef.canvas.current.width,
         height: canvasRef.canvas.current.height,
       });
-
-      console.log("upload", imageUpload);
+    } else {
+      e.target.value = null;
+      alert(
+        "Fichier trop volumineux 5mo max ou au mauvais format [jpeg,png,bmp,tiff]"
+      );
     }
-  };
+  }, 300);
 
+  //Reset form
   const handleCancel = () => {
     console.log("cancel");
   };
@@ -192,50 +199,54 @@ export default function AddPost(props) {
                     attr={{
                       type: "textarea",
                       label: "Description de l'image",
-                      forhtml: "image_desc",
+                      forhtml: "alt_FR",
                       placeholder: "Description de l'image en FR",
                       rows: "3",
                       spellCheck: "true",
                     }}
-                    ref={newPostRef.image_desc_FR}
+                    ref={newPostRef.alt_FR}
                   />
 
                   <InputBloc
                     attr={{
                       type: "textarea",
                       label: "Image description",
-                      forhtml: "image_desc",
+                      forhtml: "alt_EN",
                       placeholder: "Image description to EN",
                       rows: "3",
                       spellCheck: true,
                     }}
-                    ref={newPostRef.image_desc_EN}
+                    ref={newPostRef.alt_EN}
                   />
-                  {imageSrc.width - canvasOutput.width > 0 && (
+                  {imageUpload.width - canvasOutput.width > 0 && (
                     <InputBloc
                       attr={{
                         type: "range",
                         label: "Axe X",
                         forhtml: "axeX",
                         min: 0,
-                        max: imageSrc.width - canvasOutput.width,
+                        max: imageUpload.width - canvasOutput.width,
                         step: 1,
-                        onMouseUp: resizeImage,
+                        onMouseUp: uploadToClient,
+                        onChange: (e) => handleChange_Axis(e, "x"),
+                        value: inputRange.x,
                       }}
                       ref={canvasRef.resize_axeX}
                     />
                   )}
 
-                  {imageSrc.height - canvasOutput.height > 0 && (
+                  {imageUpload.height - canvasOutput.height > 0 && (
                     <InputBloc
                       attr={{
                         type: "range",
                         label: "Axe Y",
                         forhtml: "axeY",
                         min: 0,
-                        max: imageSrc.height - canvasOutput.height,
+                        max: imageUpload.height - canvasOutput.height,
                         step: 1,
-                        onMouseUp: resizeImage,
+                        onMouseUp: uploadToClient,
+                        onChange: (e) => handleChange_Axis(e, "y"),
+                        value: inputRange.y,
                       }}
                       ref={canvasRef.resize_axeY}
                     />

@@ -18,7 +18,6 @@ export default function useGetAllPosts(options = {}) {
   );
 
   const constructPaginatePost = (array) => {
-    console.log("caca", array);
     params.size = array.length;
 
     if (params.size) {
@@ -56,24 +55,27 @@ export default function useGetAllPosts(options = {}) {
   };
 
   useEffect(() => {
-    fetch(path.join(process.cwd(), "/api/post"), {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((r) => r.json())
-      .then((res) => {
-        console.log("collection", res[0]);
-        console.log("getAllPost", res[0].posts);
-
-        setLoading(false);
-        setPosts(() => {
-          const sliceRes = constructPaginatePost(res[0].posts);
-          return sliceRes;
-        });
+    async function fetchData() {
+      // You can await here
+      const getAllPosts = await fetch(path.join(process.cwd(), "/api/post"), {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
       });
+      // ...
+      const res = await getAllPosts.json();
+      console.log("allPost ", res[0].posts);
+
+      setLoading(false);
+      setPosts(() => {
+        const sliceRes = constructPaginatePost(res[0].posts);
+        return sliceRes;
+      });
+    }
+    fetchData();
   }, []);
+
 
   return [posts, setPosts, loading, params];
 }

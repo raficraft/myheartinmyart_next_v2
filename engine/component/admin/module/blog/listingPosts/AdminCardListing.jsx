@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function AdminCardListing(props) {
-  console.log("props", props);
+  console.log("props admincardlisting", props);
   return (
     <section className="card">
       <p className="indexInfo">{props.id}</p>
@@ -18,17 +18,15 @@ export default function AdminCardListing(props) {
           </Link>
         </div>
         <div className="card_content-img">
-          {props.img_filename && (
+          {props.imageBase6 && (
             <Image
-              placeholder="blur"
-              blurDataURL={props.imageBase64}
               src={props.imageBase64}
               alt="Et ben alors"
               width={225}
               height={150}
             />
           )}
-          {!props.img_filename && (
+          {!props.imageBase6 && (
             <Image
               src="/assets/blog/posts/placeholder.png"
               alt="lol"

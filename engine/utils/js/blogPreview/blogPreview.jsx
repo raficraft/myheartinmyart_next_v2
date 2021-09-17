@@ -6,6 +6,7 @@ import image from "next/image";
 
 export default function blogPreview(sourceFile, canvasRef, setUpload) {
   console.log("ref", canvasRef);
+  console.log("test", sourceFile);
   const imageSrc = sourceFile;
 
   //ctx source
@@ -117,6 +118,8 @@ export default function blogPreview(sourceFile, canvasRef, setUpload) {
     setUpload({
       imageBase64: img64,
       name: sourceFile.name,
+      width: maxWidth,
+      height: maxHeight,
     });
 
     URL.revokeObjectURL(img);
@@ -124,4 +127,6 @@ export default function blogPreview(sourceFile, canvasRef, setUpload) {
 
     //console.log("final : ", final); //dataUrl image
   };
+
+  return [imgSrc];
 }
