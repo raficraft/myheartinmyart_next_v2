@@ -1,7 +1,8 @@
 export default function createPost(e, fields, image, lastID) {
   console.log(e);
   console.log(image);
-  console.log(image.name);
+  console.log("image name :", image.filename);
+  console.log("image name :", image.name);
   console.log("fields : ", fields);
   console.log("hours : ", fields.hours.current.input.value);
   console.log("minutes: ", fields.minutes.current.input.value);
@@ -34,6 +35,8 @@ export default function createPost(e, fields, image, lastID) {
 
   //Brut data to article collection
   const newPost = {
+    id: newID,
+    userID: inputs.userID.value,
     activate: inputs.activate.checked,
     alt_FR: inputs.alt_FR.value,
     alt_EN: inputs.alt_EN.value,
@@ -48,10 +51,9 @@ export default function createPost(e, fields, image, lastID) {
       post: inputs.fr.content.value,
     },
     height: image.height,
-    id: newID,
+    imagePath: `/assets/blog/posts/${newID}/${image.name}`,
     timestamp: timestampTopublish,
     uploadDir: `./public/assets/blog/posts/${newID}`,
-    userID: inputs.userID.value,
     width: image.width,
   };
 

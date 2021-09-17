@@ -1,4 +1,5 @@
 import React, { useRef, useImperativeHandle, forwardRef } from "react";
+import { validInput } from "../../../utils/js/form/validInput";
 import { debounce } from "./../../../utils/js/tools";
 
 //forwardRef => pass refs from child to parent
@@ -10,7 +11,8 @@ export let InputBloc = (props, ref) => {
 
   const controlCapture = debounce(() => {
     console.log("control capture");
-    // errorMessage.current.textContent = validInput(ref);
+    console.log(validInput(ref));
+    errorMessage.current.textContent = validInput(ref);
   }, 300);
 
   useImperativeHandle(ref, () => ({
@@ -30,6 +32,8 @@ export let InputBloc = (props, ref) => {
     for (const key in attr) {
       if (Object.hasOwnProperty.call(attr, key)) {
         const element = attr[key];
+
+        key === "format" ? "data-format" : key;
 
         if (key === "forhtml") {
           attrRes["id"] = element;
@@ -68,6 +72,8 @@ export let InputBloc = (props, ref) => {
               className={`textarea-${forhtml}`}
               {...createAttr(props.attr)}
               ref={inputRef}
+              onChange={controlCapture}
+              data-format={props.format}
             ></textarea>
           );
         } else {
@@ -77,6 +83,8 @@ export let InputBloc = (props, ref) => {
               {...createAttr(props.attr)}
               type={type}
               ref={inputRef}
+              onChange={controlCapture}
+              data-format={props.format}
             />
           );
         }

@@ -24,27 +24,28 @@ export default function handler(req, res) {
     const reqBody = req.body;
 
     const newPost = {
-      userID: parseInt(req.body.userID, 10),
       id: parseInt(req.body.id),
+      userID: parseInt(req.body.userID, 10),
       activate: req.body.activate,
-      timeStamp: req.body.timestamp,
-      update_date: false,
       alt_FR: req.body.alt_FR,
       alt_EN: req.body.alt_EN,
-      width: req.body.width,
-      height: req.body.height,
-      fileName: req.body.fineName,
-      uploadDir: req.body.uploadDir,
-      fr: {
-        title: req.body.fr.title,
-        post: req.body.fr.post,
-        comment: [],
-      },
       en: {
         title: req.body.en.title,
         post: req.body.en.post,
         comment: [],
       },
+      fileName: req.body.fileName,
+      fr: {
+        title: req.body.fr.title,
+        post: req.body.fr.post,
+        comment: [],
+      },
+      height: req.body.height,
+      imagePath: req.body.imagePath,
+      timeStamp: req.body.timestamp,
+      uploadDir: req.body.uploadDir,
+      update_date: false,
+      width: req.body.width,
     };
 
     data[0].posts.push(newPost);
@@ -56,7 +57,9 @@ export default function handler(req, res) {
 
     fs.mkdir(req.body.uploadDir, { recursive: true }, (err) => {
       let base64String = req.body.base64; // Not a real image
-      // Remove header
+
+      //Vider le repertoire
+
       let base64Image = base64String.split(";base64,").pop();
       fs.writeFile(
         imagePath,

@@ -4,6 +4,7 @@ import Link from "next/link";
 
 export default function AdminCardListing(props) {
   console.log("props admincardlisting", props);
+  console.log("props admincardlisting", props.uploadDir);
   return (
     <section className="card">
       <p className="indexInfo">{props.id}</p>
@@ -18,22 +19,12 @@ export default function AdminCardListing(props) {
           </Link>
         </div>
         <div className="card_content-img">
-          {props.imageBase6 && (
-            <Image
-              src={props.imageBase64}
-              alt="Et ben alors"
-              width={225}
-              height={150}
-            />
-          )}
-          {!props.imageBase6 && (
-            <Image
-              src="/assets/blog/posts/placeholder.png"
-              alt="lol"
-              width={150}
-              height={150}
-            />
-          )}
+          <Image
+            src={`${props.imagePath}`}
+            alt="Et ben alors"
+            width={225}
+            height={150}
+          />
         </div>
       </div>
       <footer>

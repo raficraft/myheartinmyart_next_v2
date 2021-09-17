@@ -9,6 +9,8 @@ export default function blogPreview(sourceFile, canvasRef, setUpload) {
   console.log("test", sourceFile);
   const imageSrc = sourceFile;
 
+  console.log(sourceFile.name);
+
   //ctx source
   const source = canvasRef.source.current;
   const ctxSrc = source.getContext("2d");
@@ -120,6 +122,7 @@ export default function blogPreview(sourceFile, canvasRef, setUpload) {
       name: sourceFile.name,
       width: maxWidth,
       height: maxHeight,
+      fileName: sourceFile.name,
     });
 
     URL.revokeObjectURL(img);

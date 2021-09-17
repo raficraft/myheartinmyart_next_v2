@@ -57,6 +57,7 @@ export default function AddPost(props) {
     imageName: "",
     width: 0,
     height: 0,
+    fileName: "",
   });
 
   const [canvasPreview, setCanvasPreview] = useState({
@@ -127,7 +128,9 @@ export default function AddPost(props) {
                   label: "Titre de la publication",
                   forhtml: "title_fr",
                   placeholder: "Saisir le titre de la publication",
+                  required: "required",
                 }}
+                format="alphanumeric"
                 ref={newPostRef.titleFR}
               />
               <hr></hr>
@@ -137,8 +140,11 @@ export default function AddPost(props) {
                   label: "Contenu de la publication",
                   forhtml: "content_fr",
                   placeholder: "Contenu de la publication",
+                  wrap: "soft",
+                  required: "required",
                 }}
                 ref={newPostRef.contentFR}
+                format="alphanumeric"
               />
             </Tab>
             <Tab title="Publication en EN" key="form_en">
@@ -148,8 +154,11 @@ export default function AddPost(props) {
                   label: "Titre de la publication",
                   forhtml: "title_en",
                   placeholder: "Saisir le titre de la publication",
+                  wrap: "soft",
+                  required: "required",
                 }}
                 ref={newPostRef.titleEN}
+                format="alphanumeric"
               />
               <hr></hr>
               <InputBloc
@@ -158,8 +167,10 @@ export default function AddPost(props) {
                   label: "Contenu de la publication",
                   forhtml: "content_en",
                   placeholder: "Contenu de la publication",
+                  required: "required",
                 }}
                 ref={newPostRef.contentEN}
+                format="alphanumeric"
               />
             </Tab>
             <Tab title="Image d'acceuil" key="form_image">
@@ -192,6 +203,7 @@ export default function AddPost(props) {
                       id="postImage"
                       ref={newPostRef.file}
                       onChange={uploadToClient}
+                      required="required"
                     />
                   </div>
 
@@ -203,8 +215,10 @@ export default function AddPost(props) {
                       placeholder: "Description de l'image en FR",
                       rows: "3",
                       spellCheck: "true",
+                      required: "required",
                     }}
                     ref={newPostRef.alt_FR}
+                    format="alphanumeric"
                   />
 
                   <InputBloc
@@ -215,8 +229,10 @@ export default function AddPost(props) {
                       placeholder: "Image description to EN",
                       rows: "3",
                       spellCheck: true,
+                      required: "required",
                     }}
                     ref={newPostRef.alt_EN}
+                    format="alphanumeric"
                   />
                   {imageUpload.width - canvasOutput.width > 0 && (
                     <InputBloc
@@ -230,6 +246,7 @@ export default function AddPost(props) {
                         onMouseUp: uploadToClient,
                         onChange: (e) => handleChange_Axis(e, "x"),
                         value: inputRange.x,
+                        required: "required",
                       }}
                       ref={canvasRef.resize_axeX}
                     />
@@ -247,6 +264,7 @@ export default function AddPost(props) {
                         onMouseUp: uploadToClient,
                         onChange: (e) => handleChange_Axis(e, "y"),
                         value: inputRange.y,
+                        required: "required",
                       }}
                       ref={canvasRef.resize_axeY}
                     />
@@ -264,8 +282,10 @@ export default function AddPost(props) {
               label: "Date publication",
               forhtml: "timestamp",
               placeholder: "",
+              required: "required",
             }}
             ref={newPostRef.date}
+            format="date"
           />
           <hr></hr>
           <div className="bloc_time">
@@ -277,8 +297,10 @@ export default function AddPost(props) {
                 placeholder: "0",
                 min: 0,
                 max: 24,
+                required: "required",
               }}
               ref={newPostRef.hours}
+              format="numeric"
             />
 
             <InputBloc
@@ -289,8 +311,10 @@ export default function AddPost(props) {
                 placeholder: "00",
                 min: 0,
                 max: 60,
+                required: "required",
               }}
               ref={newPostRef.minutes}
+              format="numeric"
             />
             <hr></hr>
             <InputBloc
