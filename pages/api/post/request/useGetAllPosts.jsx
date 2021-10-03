@@ -3,30 +3,33 @@ import { useState, useEffect } from "react";
 
 import path from "path";
 
-export default function useGetAllPosts(options = {}) {
+export default function useGetAllPosts(options_ext = {}) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  let params = Object.assign(
+  let options = Object.assign(
     {},
     {
+      paginate: true,
       orderBy: "DESC",
       limit: 4,
       size: 0,
     },
-    options
+    options_ext
   );
 
   const constructPaginatePost = (array) => {
-    params.size = array.length;
+    options.size = array.length;
+    const sliceArray = [];
 
-    if (params.size) {
-      const numberPage = Math.ceil(array.length / params.limit);
-      const sliceArray = [];
+    if (options.size && options.size > options.limit) {
+      const numberPage = !options.paginate
+        ? 0
+        : Math.ceil(array.length / options.limit);
 
       //Sort Post Array
 
-      if (params.orderBy === "DESC") {
+      if (options.orderBy === "DESC") {
         array.sort((a, b) => {
           return b.timestamp - a.timestamp;
         });
@@ -38,19 +41,26 @@ export default function useGetAllPosts(options = {}) {
       //Slice post Array
 
       let start = 0;
-      let end = params.limit;
+      let end = options.limit;
 
-      for (let index = 0; index < numberPage; index++) {
+      for (let index = 0; index <= numberPage; index++) {
         //Demarcation of slicing
-        index === 0 ? (start = 0) : (start = index * params.limit);
-        index === 0 ? (end = params.limit) : (end = (index + 1) * params.limit);
-        end > array.length ? (end = array.length) : null;
-        sliceArray[index] = array.slice(start, end);
+        if (options.paginate) {
+          index === 0 ? (start = 0) : (start = index * options.limit);
+          index === 0
+            ? (end = options.limit)
+            : (end = (index + 1) * options.limit);
+          end > array.length ? (end = array.length) : null;
+          sliceArray[index] = array.slice(start, end);
+        } else {
+          sliceArray[index] = array.slice(start, options.size);
+        }
       }
 
       return sliceArray;
     } else {
-      return [];
+      sliceArray[0] = array.slice(0, options.size);
+      return sliceArray;
     }
   };
 
@@ -76,6 +86,5 @@ export default function useGetAllPosts(options = {}) {
     fetchData();
   }, []);
 
-
-  return [posts, setPosts, loading, params];
+  return [posts, setPosts, loading, options];
 }

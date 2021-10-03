@@ -87,6 +87,7 @@ export let InputBloc = (props, ref) => {
               ref={inputRef}
               onChange={controlCapture}
               data-format={props.format}
+              defaultValue={props.default}
             ></textarea>
           );
         } else {
@@ -98,6 +99,7 @@ export let InputBloc = (props, ref) => {
               ref={inputRef}
               onKeyUp={controlCapture}
               data-format={props.format}
+              defaultValue={props.default}
             />
           );
         }

@@ -9,7 +9,9 @@ import { goToPage } from "./function/function";
 import { debounce, filterData } from "./../../../../../utils/js/tools";
 
 export default function ListingPosts(props) {
-  const [posts, setPosts, loading] = useGetAllPosts({ limit: 6 });
+  const [posts, setPosts, loading] = useGetAllPosts({
+    limit: 6,
+  });
   const [maxPage, setMaxPage] = useState();
   const [page, setPage] = useState(0);
 
@@ -19,15 +21,15 @@ export default function ListingPosts(props) {
 
   const createListing = (posts, page) => {
     return posts[page].map((post, key) => {
-     if (typeof post.activate === "boolean") {
-       return <AdminCardListing key={`card_${key}`} {...post} />;
-     } else {
-       return;
-     }
-      
+      if (typeof post.activate === "boolean") {
+        return <AdminCardListing key={`card_${key}`} {...post} />;
+      } else {
+        return;
+      }
     });
   };
 
+  console.log(posts);
   const filterPost = debounce((e) => {
     console.log("filter", e.target.value);
     const searchValue = e.target.value;

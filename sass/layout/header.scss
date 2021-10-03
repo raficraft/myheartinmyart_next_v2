@@ -6,10 +6,27 @@
   padding :rem(16) rem(20);
   width: 100%;
 
-  h1{
-    color : rgb(5, 5, 5);
-    font-size: 2.5rem;
-    font-weight: bold;
+  #header_01{
+    h1{
+      color : rgb(5, 5, 5);
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
   }
+  
+
+  #header_02{
+
+   
+   
+      padding: 0.5rem 4rem;
+      align-self: flex-start;
+  
+  
+
+  }
+  
+
   
 }

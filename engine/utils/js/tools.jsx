@@ -55,3 +55,34 @@ export const filterData = (array, search) => {
 
   return result;
 };
+
+
+export const getDateByTimeStamp = (time, method) => {
+  let MyDate = new Date(time);
+
+  console.log(MyDate.getHours());
+  console.log(MyDate.getMinutes());
+  let MyDateString;
+
+  MyDate.setDate(MyDate.getDate());
+
+  MyDateString =
+    MyDate.getFullYear() +
+    "-" +
+    ("0" + (MyDate.getMonth() + 1)).slice(-2) +
+    "-" +
+    ("0" + MyDate.getDate()).slice(-2);
+
+  console.log(MyDateString);
+
+  switch (method) {
+    case "date":
+      return MyDateString;
+      break;
+    case "timer":
+      return {
+        hours: MyDate.getHours(),
+        min: MyDate.getMinutes(),
+      };
+  }
+};

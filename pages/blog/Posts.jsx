@@ -8,7 +8,10 @@ export default function Posts() {
     <>
       <div>
         <h1>
-          Page de post ne contentant que la logique et des composant Enfants
+          {params.language === "FR" &&
+            "Page de post ne contentant que la logique et des composant Enfants"}
+          {params.language === "EN" &&
+            "Blog page containing only logic and child components"}
         </h1>
       </div>
     </>

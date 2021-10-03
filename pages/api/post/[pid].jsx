@@ -56,6 +56,12 @@ export default function handler(req, res) {
           break;
       }
 
+    case "POST":
+      res.status(201).json({
+        log: "yellow",
+      });
+      break;
+
       break;
     case "DELETE":
       //Delete article

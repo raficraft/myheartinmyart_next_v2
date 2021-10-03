@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ParamsContext } from "./../../../../../context/ParamsProvider";
 
 export default function AdminCardListing(props) {
   console.log("props admincardlisting", props);
 
+  const { params, setParams } = useContext(ParamsContext);
+
+  const showEditModule = (postId) => {
+    console.log("click");
+    console.log(props.id);
+    const newContext = { adminSubMenu: "editPost", editData: props };
+    setParams(Object.assign({}, params, newContext));
+  };
 
   const putPost = (e, params) => {
-    const action = "putPost";
-    const postID = props.id;
+    const postId = props.id;
 
     const bodyRequest = {
       action: params.action,
@@ -17,7 +25,7 @@ export default function AdminCardListing(props) {
       postID,
     };
 
-    fetch(`/api/post/${postID}`, {
+    fetch(`/api/post/${postId}`, {
       method: "PUT",
       body: JSON.stringify(bodyRequest),
       headers: {
@@ -76,7 +84,9 @@ export default function AdminCardListing(props) {
         </div>
       </div>
       <footer>
-        <button type="button">Edit</button>
+        <button type="button" onClick={showEditModule}>
+          Edit
+        </button>
         {props.activate ? (
           <button
             type="button"

@@ -1,11 +1,4 @@
 export default function createPost(e, fields, image, lastID) {
-  console.log(e);
-  console.log(image);
-  console.log("image name :", image.filename);
-  console.log("image name :", image.name);
-  console.log("fields : ", fields);
-  console.log("hours : ", fields.hours.current.input.value);
-  console.log("minutes: ", fields.minutes.current.input.value);
   e.preventDefault();
 
   //calculate timeStamp to publish
@@ -71,6 +64,4 @@ export default function createPost(e, fields, image, lastID) {
       console.log("push json", result);
       return result;
     });
-
-
 }

@@ -10,10 +10,13 @@ export default function ParamsProvider({ children }) {
     admin: false,
     hamburger: false,
     adminMenu: "home",
-    adminSubMenu: "",
+    adminSubMenu: false,
+    editId: false,
+    editData: false,
     user: {
       isAuth: true,
     },
+    language: "FR",
   });
 
   return (

@@ -1,17 +1,27 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useContext,
+} from "react";
 import { InputBloc } from "../../../../input/inputBloc/InputBloc";
 import { Tabs } from "./../../../../menu/tabSystem/Tabs";
 import Tab from "./../../../../menu/tabSystem/Tab";
 import blogPreview from "../../../../../utils/js/blogPreview/blogPreview";
+import { debounce, getDateByTimeStamp } from "../../../../../utils/js/tools";
 import createPost from "../../../../../../pages/api/post/request/createPost"; //Call Api to create new Post
 import useGetAllPosts from "../../../../../../pages/api/post/request/useGetAllPosts";
-import { debounce } from "../../../../../utils/js/tools";
+import editPost from "../../../../../../pages/api/post/request/editPost";
 
 export default function AddPost(props) {
-  const [posts, setPosts, loading, params] = useGetAllPosts({});
+  console.log(props);
+  const [posts, setPosts, loading, options] = useGetAllPosts({
+    paginate: false,
+  });
 
   useEffect(() => {
-    setNewID(params);
+    setNewID(options);
   }, []);
 
   const maxFileSize = 5000000;
@@ -30,6 +40,7 @@ export default function AddPost(props) {
     active: useRef(),
     alt_FR: useRef(),
     alt_EN: useRef(),
+    image_filename: useRef(),
   };
 
   const canvasRef = {
@@ -38,6 +49,7 @@ export default function AddPost(props) {
     canvas: useRef(),
     source: useRef(),
   };
+
   const [inputRange, setInputRange] = useState({
     x: 0,
     y: 0,
@@ -103,7 +115,9 @@ export default function AddPost(props) {
     console.log("cancel");
   };
 
-  console.log("source", imageUpload);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <section className="adminContent adminContent-addBlog">
@@ -120,6 +134,15 @@ export default function AddPost(props) {
             name="userID"
             ref={newPostRef.userID}
           />
+
+          <input
+            type="hidden"
+            value={props.post ? props.post.fileName : ""}
+            id="image_filename"
+            name="image_filename"
+            ref={newPostRef.image_filename}
+          />
+
           <Tabs key="tabs_addBlog">
             <Tab title="Publication en FR" key="form_fr">
               <InputBloc
@@ -132,6 +155,7 @@ export default function AddPost(props) {
                 }}
                 format="alphanumeric"
                 ref={newPostRef.titleFR}
+                default={props.post ? props.post.fr.title : ""}
               />
               <hr></hr>
               <InputBloc
@@ -145,6 +169,7 @@ export default function AddPost(props) {
                 }}
                 ref={newPostRef.contentFR}
                 format="alphanumeric"
+                default={props.post ? props.post.fr.post : ""}
               />
             </Tab>
             <Tab title="Publication en EN" key="form_en">
@@ -159,6 +184,7 @@ export default function AddPost(props) {
                 }}
                 ref={newPostRef.titleEN}
                 format="alphanumeric"
+                default={props.post ? props.post.en.title : ""}
               />
               <hr></hr>
               <InputBloc
@@ -171,6 +197,7 @@ export default function AddPost(props) {
                 }}
                 ref={newPostRef.contentEN}
                 format="alphanumeric"
+                default={props.post ? props.post.fr.post : ""}
               />
             </Tab>
             <Tab title="Image d'acceuil" key="form_image">
@@ -286,6 +313,9 @@ export default function AddPost(props) {
             }}
             ref={newPostRef.date}
             format="date"
+            default={
+              props.post ? getDateByTimeStamp(props.post.timestamp, "date") : ""
+            }
           />
           <hr></hr>
           <div className="bloc_time">
@@ -301,6 +331,11 @@ export default function AddPost(props) {
               }}
               ref={newPostRef.hours}
               format="numeric"
+              default={
+                props.post
+                  ? getDateByTimeStamp(props.post.timestamp, "timer").hours
+                  : ""
+              }
             />
 
             <InputBloc
@@ -315,6 +350,11 @@ export default function AddPost(props) {
               }}
               ref={newPostRef.minutes}
               format="numeric"
+              default={
+                props.post
+                  ? getDateByTimeStamp(props.post.timestamp, "timer").min
+                  : ""
+              }
             />
             <hr></hr>
             <InputBloc
@@ -322,6 +362,7 @@ export default function AddPost(props) {
                 type: "checkbox",
                 label: "Activé la publication",
                 forhtml: "active_publish",
+                checked: props.post.activate ? "checked" : false,
               }}
               ref={newPostRef.active}
             />
@@ -332,12 +373,23 @@ export default function AddPost(props) {
               <button type="button" onClick={handleCancel}>
                 Annuler
               </button>
-              <button
-                type="button"
-                onClick={(e) => createPost(e, newPostRef, imageUpload, newID)}
-              >
-                Valider
-              </button>
+              {!props.post ? (
+                <button
+                  type="button"
+                  onClick={(e) => createPost(e, newPostRef, imageUpload, newID)}
+                >
+                  Valider
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={(e) =>
+                    editPost(e, newPostRef, imageUpload, props.post.id)
+                  }
+                >
+                  Modifier
+                </button>
+              )}
             </div>
           </footer>
         </form>

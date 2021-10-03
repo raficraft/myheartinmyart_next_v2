@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { ParamsContext } from "./../../../../context/ParamsProvider";
 
 import AddPost from "./addPost/AddPost";
+import EditPost from "./editPost/editPost";
 import ListingPosts from "./listingPosts/ListingPosts";
 
 export default function AdminBlog() {
@@ -11,11 +12,19 @@ export default function AdminBlog() {
   useEffect(() => {
     switch (params.adminSubMenu) {
       case "addPost":
-        setAdminContent(<AddPost title="Nouveau billet de blog" method="addPost"/>);
+        setAdminContent(
+          <AddPost title="Nouveau billet de blog" method="addPost" />
+        );
         break;
 
       case "editPost":
-        setAdminContent(<AddPost title="Modification d'un billet de blog" method="editPost"/>);
+        setAdminContent(
+          <AddPost
+            title="Modification d'un billet de blog"
+            method="editPost"
+            post={params.editData}
+          />
+        );
         break;
 
       default:
@@ -24,7 +33,7 @@ export default function AdminBlog() {
         );
         break;
     }
-  }, [params.adminSubMenu]);
+  }, [params.adminSubMenu, params.editId]);
 
   /* const adminContent = () => {
   

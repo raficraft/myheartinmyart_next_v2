@@ -50,8 +50,23 @@
         "uploadDir": "./public/assets/blog/posts/3",
         "update_date": false,
         "width": 574.7126436781609
+      },
+      {
+        "id": 4,
+        "userID": 1,
+        "activate": true,
+        "alt_FR": "jkjkj",
+        "alt_EN": "kjkjkjkkj",
+        "en": { "title": "kjljjlkj", "post": "ljklk", "comment": [] },
+        "fileName": "défi dessein.PNG",
+        "fr": { "title": "jjkjkjkjklljkj", "post": "kjkjljk", "comment": [] },
+        "height": 513.6986301369863,
+        "imagePath": "/assets/blog/posts/4/défi dessein.PNG",
+        "timestamp": 1633201276362,
+        "uploadDir": "./public/assets/blog/posts/4",
+        "update_date": false,
+        "width": 450
       }
-    ],
-    "trash": []
+    ]
   }
 ]
