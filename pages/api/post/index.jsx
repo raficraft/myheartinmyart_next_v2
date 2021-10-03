@@ -46,6 +46,7 @@ export default function handler(req, res) {
       uploadDir: req.body.uploadDir,
       update_date: false,
       width: req.body.width,
+      edited_by: parseInt(req.body.userID, 10),
     };
 
     data[0].posts.push(newPost);

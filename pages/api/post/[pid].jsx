@@ -58,24 +58,61 @@ export default function handler(req, res) {
 
     case "POST":
 
-      const reqBody = req.body;
       const currentKey = Object.keys(currentPost[0]);
+      const idKey = parseInt(pid);
 
       let majPost = {};
+      let reject = {};
 
       for (const iterator of currentKey) {
-        majPost[iterator] = req.body[iterator];
+        if (reqBody[iterator]) {
+          majPost[iterator] = reqBody[iterator];
+        } else {
+          majPost[iterator] = currentPost[0][iterator];
+        }
+        if (reqBody[iterator] === "" || reqBody[iterator] === "undefined") {
+          reject[iterator] = reqBody[iterator];
+          majPost[iterator] = currentPost[0][iterator];
+        }
       }
 
-      console.log(majPost);
+      console.log("add this data :", majPost);
+
+      data[0].posts.splice(idKey, 1, majPost);
+      fs.writeFileSync(filePath, JSON.stringify(data));
+
+      //Create File
+
+      const imagePath = `${reqBody.uploadDir}/${reqBody.fileName}`;
+
+      fs.mkdir(reqBody.uploadDir, { recursive: true }, (err) => {
+        let base64String = reqBody.base64; // Not a real image
+
+        //Vider le repertoire
+
+        let base64Image = base64String.split(";base64,").pop();
+        fs.writeFile(
+          imagePath,
+          base64Image,
+          { encoding: "base64" },
+          function (err) {
+            console.log("File created");
+          }
+        );
+      });
 
       res.status(201).json({
         log: "yellow",
-        post: currentPost,
+        post: currentPost[0],
         body: reqBody,
         key: currentKey,
         res: majPost,
+        reject,
+        bdd: data[0].posts[idKey],
+        error: null,
+        message: "Article Modifié avec succés",
       });
+
       break;
 
       break;

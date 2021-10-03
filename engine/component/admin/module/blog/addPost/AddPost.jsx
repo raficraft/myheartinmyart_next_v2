@@ -197,7 +197,7 @@ export default function AddPost(props) {
                 }}
                 ref={newPostRef.contentEN}
                 format="alphanumeric"
-                default={props.post ? props.post.fr.post : ""}
+                default={props.post ? props.post.en.post : ""}
               />
             </Tab>
             <Tab title="Image d'acceuil" key="form_image">
@@ -357,14 +357,17 @@ export default function AddPost(props) {
               }
             />
             <hr></hr>
+
             <InputBloc
               attr={{
                 type: "checkbox",
                 label: "Activé la publication",
                 forhtml: "active_publish",
-                checked: props.post.activate ? "checked" : false,
               }}
               ref={newPostRef.active}
+              checked={
+                props.post && props.post.activate === true ? true : false
+              }
             />
           </div>
 

@@ -5,7 +5,7 @@ import { debounce } from "./../../../utils/js/tools";
 
 //forwardRef => pass refs from child to parent
 export let InputBloc = (props, ref) => {
-  const { forhtml, label, type, format = null } = props.attr;
+  const { forhtml, label, type, format = null, checked } = props.attr;
 
   const inputRef = useRef();
   const errorMessage = useRef(null);
@@ -45,6 +45,9 @@ export let InputBloc = (props, ref) => {
     for (const key in attr) {
       if (Object.hasOwnProperty.call(attr, key)) {
         const element = attr[key];
+      /*
+        console.log("element :", element);
+        console.log("key :", key);*/
 
         key === "format" ? "data-format" : key;
 
@@ -100,6 +103,7 @@ export let InputBloc = (props, ref) => {
               onKeyUp={controlCapture}
               data-format={props.format}
               defaultValue={props.default}
+              checked={checked}
             />
           );
         }

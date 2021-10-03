@@ -48,6 +48,7 @@ export default function createPost(e, fields, image, lastID) {
     timestamp: timestampTopublish,
     uploadDir: `./public/assets/blog/posts/${newID}`,
     width: image.width,
+    edited_By: false,
   };
 
   //Call APi to add Post

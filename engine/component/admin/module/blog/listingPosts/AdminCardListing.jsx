@@ -22,7 +22,7 @@ export default function AdminCardListing(props) {
       action: params.action,
       fields: params.fields,
       value: params.value,
-      postID,
+      postId,
     };
 
     fetch(`/api/post/${postId}`, {
