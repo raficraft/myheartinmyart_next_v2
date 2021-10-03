@@ -57,8 +57,24 @@ export default function handler(req, res) {
       }
 
     case "POST":
+
+      const reqBody = req.body;
+      const currentKey = Object.keys(currentPost[0]);
+
+      let majPost = {};
+
+      for (const iterator of currentKey) {
+        majPost[iterator] = req.body[iterator];
+      }
+
+      console.log(majPost);
+
       res.status(201).json({
         log: "yellow",
+        post: currentPost,
+        body: reqBody,
+        key: currentKey,
+        res: majPost,
       });
       break;
 
