@@ -10,11 +10,7 @@ import path from "path";
  */
 
 export default function handler(req, res) {
-   const filePath = path.join(
-     process.cwd(),
-     "pages/api/data/blog/",
-     "posts.json"
-   );
+ 
 
    const fakePost = {
      posts: {
@@ -36,11 +32,8 @@ export default function handler(req, res) {
      },
    };
 
-   const fileData = fs.readFileSync(filePath);
-   const data = JSON.parse(fakePost);
-
    if (req.method === "GET") {
-     res.status(200).json(data);
+     res.status(200).json(fakePost);
      res.status(500).json({ error: "!!!!!!!!!!!!!!!" });
    } else if (req.method === "POST") {
      const reqBody = req.body;
