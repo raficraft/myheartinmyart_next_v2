@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { ParamsContext } from "./../../../../context/ParamsProvider";
 
 import AddPost from "./addPost/AddPost";
-import EditPost from "./editPost/editPost";
 import ListingPosts from "./listingPosts/ListingPosts";
 
 export default function AdminBlog() {

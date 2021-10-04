@@ -1,5 +1,3 @@
-import image from "next/image";
-
 //Scrip qui reçoit un fichier et le transform en obcjectURl
 // PAs d'upload de fichier seulement une chaine de caractère
 // https://levelup.gitconnected.com/managing-image-uploads-in-your-browser-base64-vs-objecturls-part-1-cec5ee9af7be

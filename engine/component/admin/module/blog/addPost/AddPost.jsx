@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useLayoutEffect,
-  useContext,
-} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { InputBloc } from "../../../../input/inputBloc/InputBloc";
 import { Tabs } from "./../../../../menu/tabSystem/Tabs";
 import Tab from "./../../../../menu/tabSystem/Tab";

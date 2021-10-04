@@ -1,9 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ParamsContext } from "./../../../../../context/ParamsProvider";
-import { useEffect } from "next/dist/client/router";
-import useGetAllPosts from "./../../../../../../pages/api/post/request/useGetAllPosts";
 
 export default function AdminCardListing(props) {
   console.log("props admincardlisting", props);

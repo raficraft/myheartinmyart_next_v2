@@ -1,4 +1,4 @@
-import { useRouter, useEffect } from "next/dist/client/router";
+import { useRouter } from "next/dist/client/router";
 import React, { useContext } from "react";
 import { ParamsContext } from "./../../context/ParamsProvider";
 import AdminLeftPanel from "./AdminLeftPanel";
