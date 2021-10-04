@@ -19,7 +19,7 @@ export default function handler(req, res) {
   const data = JSON.parse(fileData);
 
   if (req.method === "GET") {
-    res.status(200).json(data);
+    res.status(200).json({ toto: "tata" });
   } else if (req.method === "POST") {
     const reqBody = req.body;
 
