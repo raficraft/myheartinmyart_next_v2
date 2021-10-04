@@ -36,7 +36,7 @@ export default function Layout({ children }) {
         style={{ borderBottom: `1px solid #757c77`, padding: `1rem` }}
       >
         <div id="header_01">
-          <h1>Laboratoire</h1>
+          <h1>Laboratoir</h1>
           <Link href="/">
             <a>{`Home >`}</a>
           </Link>
