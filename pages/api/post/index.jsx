@@ -16,8 +16,28 @@ export default function handler(req, res) {
      "posts.json"
    );
 
+   const fakePost = {
+     posts: {
+       id: 0,
+       userID: 1,
+       activate: true,
+       alt_FR: "",
+       alt_EN: "",
+       en: { title: "kjkljkl", post: "jkljlkj" },
+       fileName: "test.jpg",
+       fr: { title: "jkjk oooo", post: "jklkjlkjk" },
+       height: 648.4177215189874,
+       imagePath: "/assets/blog/posts/0/test.jpg",
+       timestamp: 1633293499255,
+       uploadDir: "./public/assets/blog/posts/0",
+       update_date: 1633293458256,
+       width: 450,
+       edited_by: false,
+     },
+   };
+
    const fileData = fs.readFileSync(filePath);
-   const data = JSON.parse(fileData);
+   const data = JSON.parse(fakePost);
 
    if (req.method === "GET") {
      res.status(200).json(data);
