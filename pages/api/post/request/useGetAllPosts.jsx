@@ -66,7 +66,7 @@ export default function useGetAllPosts(initialValue = [], options_ext = {}) {
   useEffect(() => {
     (async function () {
       // You can await here
-      const response = await fetch(path.join(process.cwd(), "/api/post/"), {
+      const response = await fetch("/api/post/", {
         method: "GET",
         headers: {
           "User-Agent":
