@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 
 import path from "path";
-import { addListener } from "process";
 
 export default function useGetAllPosts(initialValue = [], options_ext = {}) {
   const [posts, setPosts] = useState(initialValue);
@@ -72,7 +71,6 @@ export default function useGetAllPosts(initialValue = [], options_ext = {}) {
         headers: {
           "User-Agent":
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
-
           "Content-Type": "application/json",
           Accept: "application/json",
         },
@@ -89,7 +87,8 @@ export default function useGetAllPosts(initialValue = [], options_ext = {}) {
           return sliceRes;
         });
       } else {
-        addListener(JSON.stringify(res));
+        console.log("res error : ", res);
+        res.send(JSON.stringify(res));
       }
     })();
   }, []);
