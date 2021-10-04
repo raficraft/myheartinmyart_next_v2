@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Loader from "../../../../loader/Loader";
 import { InputSearch } from "./../../../../input/inputSearch/InputSearch";
-import AdminCardListing from "./AdmincardListing";
 
 //System Function
 import useGetAllPosts from "../../../../../../pages/api/post/request/useGetAllPosts";
 import { goToPage } from "./function/function";
 import { debounce, filterData } from "./../../../../../utils/js/tools";
+import AdminCardListing from "./AdminCardListing";
 
 export default function ListingPosts(props) {
   const [posts, setPosts, loading, setLoading] = useGetAllPosts([], {
