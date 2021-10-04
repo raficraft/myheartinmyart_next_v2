@@ -75,6 +75,7 @@ export default function useGetAllPosts(initialValue = [], options_ext = {}) {
       });
       // ...
       const res = await response.json();
+      console.log("Request result ", res);
       console.log("allPost ", res[0].posts);
 
       if (response.ok) {
