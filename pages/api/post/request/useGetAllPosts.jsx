@@ -67,7 +67,7 @@ export default function useGetAllPosts(initialValue = [], options_ext = {}) {
   useEffect(() => {
     (async function () {
       // You can await here
-      const response = await fetch(path.join(process.cwd(), "/api/post"), {
+      const response = await fetch(path.join(process.cwd(), "/api/post/"), {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
