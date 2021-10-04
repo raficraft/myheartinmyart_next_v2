@@ -3,7 +3,7 @@ import React, { useContext, useRef } from "react";
 import Hamburger from "./../button/hamburger/Hamburger";
 import { ParamsContext } from "../../context/ParamsProvider";
 import { useRouter } from "next/dist/client/router";
-import HamburgerMenu from "../menu/hamburgerMenu";
+import HamburgerMenu from "../menu/HamburgerMenu";
 import AdminIcon from "./../button/adminIcon/AdminIcon";
 import AdminContainer from "../admin/AdminContainer";
 
