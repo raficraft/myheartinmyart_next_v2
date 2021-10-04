@@ -10,12 +10,14 @@ import path from "path";
  */
 
 export default function handler(req, res) {
-   const filePath = path.join("pages/api/data/blog/", "posts.json");
-
-  
+   const filePath = path.join(
+     process.cwd(),
+     "pages/api/data/blog/",
+     "posts.json"
+   );
 
    if (req.method === "GET") {
-     res.status(200).json(filePath);
+     res.status(200).json(filepath);
    } else if (req.method === "POST") {
      const reqBody = req.body;
 
