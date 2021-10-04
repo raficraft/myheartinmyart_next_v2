@@ -9,7 +9,7 @@ import { goToPage } from "./function/function";
 import { debounce, filterData } from "./../../../../../utils/js/tools";
 
 export default function ListingPosts(props) {
-  const [posts, setPosts, loading] = useGetAllPosts({
+  const [posts, setPosts, loading, setLoading] = useGetAllPosts([], {
     limit: 6,
   });
   const [maxPage, setMaxPage] = useState();
@@ -17,9 +17,9 @@ export default function ListingPosts(props) {
 
   useEffect(() => {
     posts.length && setMaxPage(posts.length);
-  }, [posts.length, useGetAllPosts]);
+  }, []);
 
-  const createListing = (posts, page) => {
+  const createListing = (page) => {
     return posts[page].map((post, key) => {
       if (typeof post.activate === "boolean") {
         return <AdminCardListing key={`card_${key}`} {...post} />;
@@ -29,7 +29,6 @@ export default function ListingPosts(props) {
     });
   };
 
-  console.log(posts);
   const filterPost = debounce((e) => {
     console.log("filter", e.target.value);
     const searchValue = e.target.value;
@@ -75,7 +74,7 @@ export default function ListingPosts(props) {
       <div>Système de filtre (on-work)</div>
       <hr></hr>
       <main className="addPosts_container">
-        {posts.length && createListing(posts, page)}
+        {posts.length && createListing(page)}
       </main>
       <footer className="paginate_container">
         {posts.length && createPagination(maxPage)}

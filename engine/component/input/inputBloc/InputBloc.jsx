@@ -102,7 +102,7 @@ export let InputBloc = (props, ref) => {
               ref={inputRef}
               onKeyUp={controlCapture}
               data-format={props.format}
-              defaultValue={props.default}
+              defaultValue={props.default ? props.default : null}
               checked={checked}
             />
           );

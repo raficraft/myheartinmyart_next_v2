@@ -40,12 +40,12 @@ export default function handler(req, res) {
 
           res.status(201).json({
             error: null,
-            message: "Article modifié avec succès",
+            message: `Article modifié avec succès => ${reqBody.fields} :  ${newVal}`,
+            newPosts: data[0].posts,
             console: {
               reqBody,
               idKey,
               currentPost,
-              gnak: currentPost[0],
               newVal,
             },
           });
@@ -57,13 +57,13 @@ export default function handler(req, res) {
       }
 
     case "POST":
-
       const currentKey = Object.keys(currentPost[0]);
       const idKey = parseInt(pid);
 
       let majPost = {};
       let reject = {};
 
+      //Create Maj
       for (const iterator of currentKey) {
         if (reqBody[iterator]) {
           majPost[iterator] = reqBody[iterator];
@@ -78,6 +78,7 @@ export default function handler(req, res) {
 
       console.log("add this data :", majPost);
 
+      //Maj collection
       data[0].posts.splice(idKey, 1, majPost);
       fs.writeFileSync(filePath, JSON.stringify(data));
 

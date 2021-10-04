@@ -2,9 +2,10 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 import path from "path";
+import { addListener } from "process";
 
-export default function useGetAllPosts(options_ext = {}) {
-  const [posts, setPosts] = useState([]);
+export default function useGetAllPosts(initialValue = [], options_ext = {}) {
+  const [posts, setPosts] = useState(initialValue);
   const [loading, setLoading] = useState(true);
 
   let options = Object.assign(
@@ -12,7 +13,7 @@ export default function useGetAllPosts(options_ext = {}) {
     {
       paginate: true,
       orderBy: "DESC",
-      limit: 4,
+      limit: 0,
       size: 0,
     },
     options_ext
@@ -65,26 +66,29 @@ export default function useGetAllPosts(options_ext = {}) {
   };
 
   useEffect(() => {
-    async function fetchData() {
+    (async function () {
       // You can await here
-      const getAllPosts = await fetch(path.join(process.cwd(), "/api/post"), {
+      const response = await fetch(path.join(process.cwd(), "/api/post"), {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
       });
       // ...
-      const res = await getAllPosts.json();
+      const res = await response.json();
       console.log("allPost ", res[0].posts);
 
-      setLoading(false);
-      setPosts(() => {
-        const sliceRes = constructPaginatePost(res[0].posts);
-        return sliceRes;
-      });
-    }
-    fetchData();
+      if (response.ok) {
+        setLoading(false);
+        setPosts(() => {
+          const sliceRes = constructPaginatePost(res[0].posts);
+          return sliceRes;
+        });
+      } else {
+        addListener(JSON.stringify(res));
+      }
+    })();
   }, []);
 
-  return [posts, setPosts, loading, options];
+  return [posts, setPosts, loading, setLoading, options];
 }

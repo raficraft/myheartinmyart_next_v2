@@ -16,7 +16,7 @@ import editPost from "../../../../../../pages/api/post/request/editPost";
 
 export default function AddPost(props) {
   console.log(props);
-  const [posts, setPosts, loading, options] = useGetAllPosts({
+  const [, , loading, setLoading, options] = useGetAllPosts([], {
     paginate: false,
   });
 

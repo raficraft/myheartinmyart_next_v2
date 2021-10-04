@@ -59,9 +59,6 @@ export const filterData = (array, search) => {
 
 export const getDateByTimeStamp = (time, method) => {
   let MyDate = new Date(time);
-
-  console.log(MyDate.getHours());
-  console.log(MyDate.getMinutes());
   let MyDateString;
 
   MyDate.setDate(MyDate.getDate());
@@ -73,7 +70,6 @@ export const getDateByTimeStamp = (time, method) => {
     "-" +
     ("0" + MyDate.getDate()).slice(-2);
 
-  console.log(MyDateString);
 
   switch (method) {
     case "date":
