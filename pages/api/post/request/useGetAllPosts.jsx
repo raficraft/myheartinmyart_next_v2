@@ -66,15 +66,18 @@ export default function useGetAllPosts(initialValue = [], options_ext = {}) {
   useEffect(() => {
     (async function () {
       // You can await here
-      const response = await fetch(path.join(__dirname, "/api/post/"), {
-        method: "GET",
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+      const response = await fetch(
+        path.join("https://myheartinmyart-next-v2.vercel.app", "/api/post/"),
+        {
+          method: "GET",
+          headers: {
+            "User-Agent":
+              "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
       // ...
       const res = await response.json();
       console.log("Request result ", res);
