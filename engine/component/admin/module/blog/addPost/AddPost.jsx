@@ -9,13 +9,8 @@ import useGetAllPosts from "../../../../../../pages/api/post/request/useGetAllPo
 import editPost from "../../../../../../pages/api/post/request/editPost";
 
 export default function AddPost(props) {
-  console.log(props);
-  const [, , loading, setLoading, options] = useGetAllPosts([], {
-    paginate: false,
-  });
-
   useEffect(() => {
-    setNewID(options);
+    setNewID(props.length);
   }, []);
 
   const maxFileSize = 5000000;
@@ -108,10 +103,6 @@ export default function AddPost(props) {
   const handleCancel = () => {
     console.log("cancel");
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <section className="adminContent adminContent-addBlog">

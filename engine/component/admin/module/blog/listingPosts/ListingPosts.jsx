@@ -8,19 +8,23 @@ import { goToPage } from "./function/function";
 import { debounce, filterData } from "./../../../../../utils/js/tools";
 import AdminCardListing from "./AdminCardListing";
 
+
+
 export default function ListingPosts(props) {
-  const [posts, setPosts, loading, setLoading] = useGetAllPosts([], {
-    limit: 6,
-  });
+  const posts = props.posts;
   const [maxPage, setMaxPage] = useState();
   const [page, setPage] = useState(0);
 
+  //paGination du tableau
+
   useEffect(() => {
-    posts.length && setMaxPage(posts.length);
+    //setPosts(constructPaginatePost(posts, { limit: 6 }));
+    posts.length && setMaxPage(props.length);
   }, []);
 
-  const createListing = (page) => {
-    return posts[page].map((post, key) => {
+  const createListing = (array, page) => {
+    console.log("outset", array[page]);
+    return array.map((post, key) => {
       if (typeof post.activate === "boolean") {
         return <AdminCardListing key={`card_${key}`} {...post} />;
       } else {
@@ -54,13 +58,10 @@ export default function ListingPosts(props) {
     return paginate;
   };
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <section className="adminContent adminContent-addPosts">
       <header>
         <h1>{props.title}</h1>
-
         <InputSearch
           attr={{
             label: "",
@@ -73,12 +74,7 @@ export default function ListingPosts(props) {
       </header>
       <div>Système de filtre (on-work)</div>
       <hr></hr>
-      <main className="addPosts_container">
-        {posts.length && createListing(page)}
-      </main>
-      <footer className="paginate_container">
-        {posts.length && createPagination(maxPage)}
-      </footer>
+      {props.children}
     </section>
   );
 }
