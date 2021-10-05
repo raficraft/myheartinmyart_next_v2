@@ -42,11 +42,43 @@ export default function AdminBlog(props) {
 
         default:
           //READ post Module
-          setAdminContent(
-            //Logic de la page
-            //Alterate Entries {active,timeStamp}
-            //Go to Edit pages
+          //Logic de la page
+          //Alterate Entries {active,timeStamp}
+          //Go to Edit pages
+          console.log("props admincardlisting", props);
 
+          const showEditModule = (postId) => {
+            console.log("click");
+            console.log(props.id);
+            const newContext = { adminSubMenu: "editPost", editData: props };
+            setParams(Object.assign({}, params, newContext));
+          };
+
+          const putPost = (e, params) => {
+            const postId = props.id;
+
+            const bodyRequest = {
+              action: params.action,
+              fields: params.fields,
+              value: params.value,
+              postId,
+            };
+
+            fetch(`/api/post/${postId}`, {
+              method: "PUT",
+              body: JSON.stringify(bodyRequest),
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            })
+              .then((r) => r.json())
+              .then((result) => {
+                console.log("Request API", result);
+              });
+          };
+
+          setAdminContent(
             <ListingPosts
               title="Liste des Billets de Blog"
               key="ListingBlog"
@@ -54,7 +86,11 @@ export default function AdminBlog(props) {
               posts={posts}
             >
               <main className="addPosts_container">
-                <CreateCard array={posts} />
+                <CreateCard
+                  array={posts}
+                  showEditModule={showEditModule}
+                  putPost={putPost}
+                />
               </main>
 
               <footer className="paginate_container">
