@@ -46,6 +46,25 @@
   flex: 1;
   padding: rem(16);
   background-color: darkgoldenrod;
+  position: relative;
+  .trashPost {
+    $size : 3rem;
+    $offset : -1.5rem;
+    @include size($size,$size);
+    position: absolute;
+    bottom : $offset; 
+    right : $offset;
+    @include circle();
+    border : 2px solid black;
+    transition : $softTransition;
+    svg{
+      @include size(50%,50%);
+     
+    }  
+    @include on-event(){
+      transform: scale(1.2) ;
+    }
+  }
 }
 
 .paginate_container {

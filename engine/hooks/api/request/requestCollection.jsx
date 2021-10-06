@@ -19,16 +19,17 @@ export function useFetch(url, options) {
       });
       const responseData = await response.json();
       if (response.ok) {
+        const items = responseData[0][options.collectionName];
         setState({
-          items: responseData[0][options.collectionName],
+          items: items,
           loading: false,
         });
       } else {
         alert(JSON.stringify(responseData));
-        setItem((s) => ({ ...s, loading: false }));
+        setState((s) => ({ ...s, loading: false }));
       }
     })();
   }, []);
 
-  return [state.loading, state.items];
+  return [state.loading, state.items, setState];
 }

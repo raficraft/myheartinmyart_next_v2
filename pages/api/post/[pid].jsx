@@ -8,8 +8,6 @@ import path from "path";
  * @param {*} res
  */
 
-
-
 export default function handler(req, res) {
   const filePath = path.join(
     process.cwd(),
@@ -50,9 +48,6 @@ export default function handler(req, res) {
             },
           });
 
-          break;
-
-        case "repost":
           break;
       }
 
@@ -119,12 +114,40 @@ export default function handler(req, res) {
       break;
     case "DELETE":
       //Delete article
-      data.splice(idKey, 1);
+      const deleteID = parseInt(pid);
+      data[0].posts.splice(deleteID, 1);
+
+      //Rewrite ID
+      const collectionLength = data[0].posts.length;
+
+      for (let i = 0; i < collectionLength; i++) {
+        const item = data[0].posts[i];
+        item.id = i;
+      }
+
+      console.log("yolo", currentPost[0].uploadDir);
+
+      //Delete Dir to have illustration image
+      const deleteDir = path.join(process.cwd(), currentPost[0].uploadDir);
+      fs.rmdir(deleteDir, { recursive: true }, (err) => {
+        if (err) {
+          throw err;
+        }
+
+        console.log(`${deleteDir} is deleted!`);
+      });
+
+      // del Dir
+
       fs.writeFileSync(filePath, JSON.stringify(data));
       res.status(201).json({
         error: null,
         message: "Article supprimer avec succès",
-        console: { delID: idKey, data: data },
+        newPosts: data,
+        console: {
+          delID: deleteID,
+          data: data,
+        },
       });
 
       break;

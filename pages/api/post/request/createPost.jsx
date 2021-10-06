@@ -1,6 +1,8 @@
 export default function createPost(e, fields, image, lastID) {
   e.preventDefault();
 
+
+  console.log("DIANTRE !!!!! : ", lastID);
   //calculate timeStamp to publish
   const datePost = new Date();
   const timeStampByDate = datePost.getTime(fields.date.current.input.value);
@@ -8,7 +10,7 @@ export default function createPost(e, fields, image, lastID) {
   const minutes = fields.minutes.current.input.value * 1000;
   const timestampTopublish = timeStampByDate + hours + minutes;
 
-  const newID = lastID.size ? lastID.size + 1 : 0;
+  const newID = lastID;
   const inputs = {
     userID: fields.userID.current,
     activate: fields.active.current.input,

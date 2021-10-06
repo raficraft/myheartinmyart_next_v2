@@ -5,12 +5,14 @@ import AddPost from "./addPost/AddPost";
 import ListingPosts from "./listingPosts/ListingPosts";
 import { useFetch } from "./../../../../hooks/api/request/requestCollection";
 import CreateCard from "./listingPosts/CreateCard";
+import { FaTrashAlt } from "react-icons/fa";
 
 export default function AdminBlog(props) {
   const { params, setParams } = useContext(ParamsContext);
   const [adminContent, setAdminContent] = useState();
+  const [showPost, setShowPost] = useState(true);
   //Fetch data
-  const [loadingPost, posts] = useFetch("/api/post/", {
+  const [loadingPost, posts, setPosts] = useFetch("/api/post/", {
     collectionName: "posts",
   });
 
@@ -55,16 +57,18 @@ export default function AdminBlog(props) {
           };
 
           const putPost = (e, params) => {
-            const postId = props.id;
+            console.log("yolo");
+
+            console.log(params);
 
             const bodyRequest = {
               action: params.action,
               fields: params.fields,
               value: params.value,
-              postId,
+              postId: params.postId,
             };
 
-            fetch(`/api/post/${postId}`, {
+            fetch(`/api/post/${params.postId}`, {
               method: "PUT",
               body: JSON.stringify(bodyRequest),
               headers: {
@@ -75,12 +79,44 @@ export default function AdminBlog(props) {
               .then((r) => r.json())
               .then((result) => {
                 console.log("Request API", result);
+                setPosts({ items: result.newPosts });
+                console.log(posts);
+              });
+          };
+
+          const showTrash = () => {
+            console.log("click");
+            console.log("init", showPost);
+            const newVal = showPost === "trash" ? true : "trash";
+            setShowPost(newVal);
+            console.log("new : ", showPost);
+            return "yolo";
+          };
+
+          const delPost = (e, params) => {
+            console.log("delPost");
+            fetch(`/api/post/${params.postId}`, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            })
+              .then((r) => r.json())
+              .then((result) => {
+                console.log("Request API , suppression article", result);
+                setPosts({ items: result.newPosts });
+                console.log(posts);
               });
           };
 
           setAdminContent(
             <ListingPosts
-              title="Liste des Billets de Blog"
+              title={
+                showPost === "trash"
+                  ? "Billets de blog Supprimé"
+                  : "Liste des Billets de Blog"
+              }
               key="ListingBlog"
               length={posts.length}
               posts={posts}
@@ -90,7 +126,12 @@ export default function AdminBlog(props) {
                   array={posts}
                   showEditModule={showEditModule}
                   putPost={putPost}
+                  filterBy={showPost}
+                  delPost={delPost}
                 />
+                <button className="trashPost" onClick={showTrash}>
+                  <FaTrashAlt />
+                </button>
               </main>
 
               <footer className="paginate_container">
@@ -101,7 +142,7 @@ export default function AdminBlog(props) {
           break;
       }
     }
-  }, [params.adminSubMenu, loadingPost, posts, params.editData]);
+  }, [params.adminSubMenu, loadingPost, posts, params.editData, showPost]);
 
   return <>{loadingPost ? <h1>Loading ... !!!!!! :D</h1> : adminContent}</>;
 }

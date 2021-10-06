@@ -5,7 +5,6 @@ import Tab from "./../../../../menu/tabSystem/Tab";
 import blogPreview from "../../../../../utils/js/blogPreview/blogPreview";
 import { debounce, getDateByTimeStamp } from "../../../../../utils/js/tools";
 import createPost from "../../../../../../pages/api/post/request/createPost"; //Call Api to create new Post
-import useGetAllPosts from "../../../../../../pages/api/post/request/useGetAllPosts";
 import editPost from "../../../../../../pages/api/post/request/editPost";
 
 export default function AddPost(props) {

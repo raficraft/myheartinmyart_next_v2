@@ -7,8 +7,6 @@ import { debounce, filterData } from "./../../../../../utils/js/tools";
 export default function ListingPosts(props) {
   const posts = props.posts;
 
-  //paGination du tableau
-
   const filterPost = debounce((e) => {
     console.log("filter", e.target.value);
     const searchValue = e.target.value;

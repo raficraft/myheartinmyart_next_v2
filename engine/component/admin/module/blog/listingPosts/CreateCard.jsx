@@ -5,106 +5,142 @@ export default function CreateCard({
   array,
   putPost,
   showEditModule,
+  filterBy,
+  delPost,
   ...props
 }) {
   console.log(array);
+  console.log(filterBy);
 
-  return array.map((post, key) => {
-    if (typeof post.activate === "boolean") {
-      return (
-        <section className="card">
-          <p className="indexInfo">{post.id}</p>
-          <button
-            type="button"
-            className="btn_close-topRight"
-            onClick={(e) =>
-              putPost(e, {
-                action: "alterateEntrie",
-                fields: "activate",
-                value: "trash",
-              })
-            }
-            data-action="delPost"
-          >
-            X
-          </button>
-          <div className="card_content">
-            <div className="card_content-info">
-              <h1>{post.fr.title}</h1>
-              <Link href={`/blog/${post.id}`}>
-                <a>{`Accéder a ce billet de blog`}</a>
-              </Link>
-            </div>
-            <div className="card_content-img">
-              {post.fileName && (
-                <Image
-                  src={`${post.imagePath}`}
-                  alt="Et ben alors"
-                  width={225}
-                  height={150}
-                  title="test"
-                />
-              )}
-              {!post.fileName && (
-                <Image
-                  src="/assets/blog/posts/placeholder.png"
-                  alt="lol"
-                  width={150}
-                  height={150}
-                />
-              )}
-            </div>
-          </div>
-          <footer>
-            <button type="button" onClick={showEditModule}>
-              Edit
-            </button>
-            {post.activate ? (
-              <button
-                type="button"
-                onClick={(e) =>
-                  putPost(e, {
-                    action: "alterateEntrie",
-                    fields: "activate",
-                    value: false,
-                  })
-                }
-                data-action="activatePost"
-              >
-                Deactive
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={(e) =>
-                  putPost(e, {
-                    action: "alterateEntrie",
-                    fields: "activate",
-                    value: true,
-                  })
-                }
-                data-action="deactivePost"
-              >
-                Active
-              </button>
-            )}
+  const condition = (filterBy, post) => {
+    console.log(post);
+    return filterBy === "trash"
+      ? post.activate === "trash"
+      : post.activate !== "trash";
+  };
+
+  return array
+    .filter((post, key) => condition(filterBy, post))
+    .map((post, key) => {
+      {
+        return (
+          <section className="card" key={key}>
+            <p className="indexInfo">{post.id}</p>
             <button
               type="button"
+              className="btn_close-topRight"
               onClick={(e) =>
-                putPost(e, {
-                  action: "alterateEntrie",
-                  fields: "timestamp",
-                  value: Date.now(),
-                })
+                filterBy !== "trash"
+                  ? putPost(e, {
+                      action: "alterateEntrie",
+                      fields: "activate",
+                      value: "trash",
+                      postId: post.id,
+                    })
+                  : delPost(e, {
+                      action: "deletePost",
+                      postId: post.id,
+                    })
               }
+              data-action="delPost"
             >
-              Repost
+              X
             </button>
-          </footer>
-        </section>
-      );
-    } else {
-      return;
-    }
-  });
+            <div className="card_content">
+              <div className="card_content-info">
+                <h1>{post.fr.title}</h1>
+                <Link href={`/blog/${post.id}`}>
+                  <a>{`Accéder a ce billet de blog`}</a>
+                </Link>
+              </div>
+              <div className="card_content-img">
+                {post.fileName && (
+                  <Image
+                    src={`${post.imagePath}`}
+                    alt="Et ben alors"
+                    width={225}
+                    height={150}
+                    title="test"
+                  />
+                )}
+                {!post.fileName && (
+                  <Image
+                    src="/assets/blog/posts/placeholder.png"
+                    alt="lol"
+                    width={150}
+                    height={150}
+                  />
+                )}
+              </div>
+            </div>
+            <footer>
+              <button type="button" onClick={showEditModule}>
+                Edit
+              </button>
+              {post.activate ? (
+                <button
+                  type="button"
+                  onClick={(e) =>
+                    putPost(e, {
+                      action: "alterateEntrie",
+                      fields: "activate",
+                      postId: post.id,
+                      value: false,
+                    })
+                  }
+                  data-action="activatePost"
+                >
+                  Deactive
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={(e) =>
+                    putPost(e, {
+                      action: "alterateEntrie",
+                      fields: "activate",
+                      value: true,
+                      postId: post.id,
+                    })
+                  }
+                  data-action="deactivePost"
+                >
+                  Active
+                </button>
+              )}
+
+              {filterBy !== "trash" ? (
+                <button
+                  type="button"
+                  onClick={(e) =>
+                    putPost(e, {
+                      action: "alterateEntrie",
+                      fields: "timestamp",
+                      value: Date.now(),
+                      postId: post.id,
+                    })
+                  }
+                >
+                  Repost
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={(e) =>
+                    putPost(e, {
+                      action: "alterateEntrie",
+                      fields: "activate",
+                      value: false,
+                      postId: post.id,
+                    })
+                  }
+                >
+                  Restore
+                </button>
+              )}
+            </footer>
+          </section>
+        );
+      }
+    });
 }
