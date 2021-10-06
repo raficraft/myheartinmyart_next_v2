@@ -74,8 +74,10 @@ export default function handler(req, res) {
        );
      });
 
-     res
-       .status(201)
-       .json({ message: "Article ajouté", result: data, console: { reqBody } });
+     res.status(201).json({
+       message: "Article ajouté",
+       newPosts: data[0].posts,
+       console: { reqBody },
+     });
    }
 }

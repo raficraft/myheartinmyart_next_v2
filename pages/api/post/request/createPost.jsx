@@ -1,8 +1,6 @@
 export default function createPost(e, fields, image, lastID) {
   e.preventDefault();
 
-
-  console.log("DIANTRE !!!!! : ", lastID);
   //calculate timeStamp to publish
   const datePost = new Date();
   const timeStampByDate = datePost.getTime(fields.date.current.input.value);
@@ -64,7 +62,9 @@ export default function createPost(e, fields, image, lastID) {
   })
     .then((r) => r.json())
     .then((result) => {
-      console.log("push json", result);
+      //How to set Posts???
+
+      console.log("api return , add post", result);
       return result;
     });
 }

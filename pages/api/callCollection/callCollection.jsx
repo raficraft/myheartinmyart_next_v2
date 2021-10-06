@@ -1,7 +1,6 @@
 export const collectionIfExist = async (params) => {
   const collectionDir = params.dir;
 
-  console.log("yolo");
 
   fs.mkdir(collectionDir, { recursive: true }, (err) => {
     console.log(err);

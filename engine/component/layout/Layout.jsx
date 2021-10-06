@@ -19,7 +19,6 @@ export default function Layout({ children }) {
 
   const handleChange = (e) => {
     console.log(e);
-    console.log();
 
     const currentLanguage = e.target.value;
 

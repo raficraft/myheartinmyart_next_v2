@@ -31,5 +31,9 @@ export function useFetch(url, options) {
     })();
   }, []);
 
+  console.log("?????");
+  console.log("?????", state);
+
+
   return [state.loading, state.items, setState];
 }

@@ -33,7 +33,6 @@ export const validInput = (input) => {
       break;
 
     case "alphanumeric":
-      console.log("????");
       thisInput.error =
         thisInput.value.length < 3 ? "Chaîne de caractère trop courte" : "";
 

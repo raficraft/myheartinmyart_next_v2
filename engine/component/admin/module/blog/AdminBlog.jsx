@@ -16,6 +16,8 @@ export default function AdminBlog(props) {
     collectionName: "posts",
   });
 
+  console.log("POSTS ON_LOAD : ", posts.length);
+
   useEffect(() => {
     if (!loadingPost) {
       switch (params.adminSubMenu) {
@@ -24,22 +26,29 @@ export default function AdminBlog(props) {
           console.log("New id value", posts.length);
           setAdminContent(
             <AddPost
-              method="addPost"
               length={posts.length}
               title={"Nouveau billet de blog"}
+              setParams={setParams}
+              setPosts={setPosts}
             />
           );
           break;
 
         //Edit Post Module
         case "editPost":
-          setAdminContent(
-            <AddPost
-              method="editPost"
-              post={params.editData}
-              title={"Modification d'un billet de blog"}
-            ></AddPost>
-          );
+          if (params.editId) {
+            setAdminContent(
+              <AddPost
+                post={posts[params.editId]}
+                title={"Modification d'un billet de blog"}
+                setPosts={setPosts}
+                setParams={setParams}
+              ></AddPost>
+            );
+          } else {
+            alert("params editId undefined");
+          }
+
           break;
 
         default:
@@ -57,8 +66,6 @@ export default function AdminBlog(props) {
           };
 
           const putPost = (e, params) => {
-            console.log("yolo");
-
             console.log(params);
 
             const bodyRequest = {
@@ -97,10 +104,6 @@ export default function AdminBlog(props) {
             console.log("delPost");
             fetch(`/api/post/${params.postId}`, {
               method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
             })
               .then((r) => r.json())
               .then((result) => {

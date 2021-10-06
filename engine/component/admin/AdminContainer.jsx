@@ -17,7 +17,7 @@ export default function AdminContainer() {
   const { params, setParams } = useContext(ParamsContext);
 
   const adminContainer = () => {
-    console.log("params admin menu : ", params.adminMenu);
+    console.log("params admin menu : ", params);
 
     switch (params.adminMenu) {
       case "User":

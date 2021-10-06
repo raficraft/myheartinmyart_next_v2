@@ -7,7 +7,6 @@ import { debounce } from "./../../../../../utils/js/tools";
 import blogPreview from "../../../../../utils/js/blogPreview/blogPreview";
 
 export default function EditPost(props) {
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   console.log(props);
   const [currentPost, setCurrentPost, loading] = useFindPostById(props.postId);
 

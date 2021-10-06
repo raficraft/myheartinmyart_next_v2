@@ -1,15 +1,22 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { InputBloc } from "../../../../input/inputBloc/InputBloc";
 import { Tabs } from "./../../../../menu/tabSystem/Tabs";
 import Tab from "./../../../../menu/tabSystem/Tab";
 import blogPreview from "../../../../../utils/js/blogPreview/blogPreview";
 import { debounce, getDateByTimeStamp } from "../../../../../utils/js/tools";
-import createPost from "../../../../../../pages/api/post/request/createPost"; //Call Api to create new Post
 import editPost from "../../../../../../pages/api/post/request/editPost";
+import { unstable_batchedUpdates } from "react-dom";
 
-export default function AddPost(props) {
+export default function AddPost({
+  length,
+  title,
+  setParams,
+  setPosts,
+  ...props
+}) {
+  const [newID, setNewID] = useState({});
   useEffect(() => {
-    setNewID(props.length);
+    setNewID(length);
   }, []);
 
   const maxFileSize = 5000000;
@@ -37,37 +44,6 @@ export default function AddPost(props) {
     canvas: useRef(),
     source: useRef(),
   };
-
-  const [inputRange, setInputRange] = useState({
-    x: 0,
-    y: 0,
-  });
-
-  const handleChange_Axis = (e, axis) => {
-    if (axis === "x") {
-      setInputRange({ x: e.target.value });
-    } else {
-      setInputRange({ y: e.target.value });
-    }
-  };
-
-  const [newID, setNewID] = useState({});
-  const [imageUpload, setImageUpload] = useState({
-    imageBase64: "",
-    imageName: "",
-    width: 0,
-    height: 0,
-    fileName: "",
-  });
-
-  const [canvasPreview, setCanvasPreview] = useState({
-    width: 0,
-    height: 0,
-  });
-  const [canvasOutput, setCanvasOutput] = useState({
-    width: 0,
-    height: 0,
-  });
 
   const uploadToClient = debounce((e) => {
     const file = newPostRef.file.current.files[0];
@@ -98,9 +74,128 @@ export default function AddPost(props) {
     }
   }, 300);
 
+  const [imageUpload, setImageUpload] = useState({
+    imageBase64: "",
+    imageName: "",
+    width: 0,
+    height: 0,
+    fileName: "",
+  });
+
+  const [canvasPreview, setCanvasPreview] = useState({
+    width: 0,
+    height: 0,
+  });
+  const [canvasOutput, setCanvasOutput] = useState({
+    width: 0,
+    height: 0,
+  });
+
+  const [inputRange, setInputRange] = useState({
+    x: 0,
+    y: 0,
+  });
+
+  const handleChange_Axis = (e, axis) => {
+    if (axis === "x") {
+      setInputRange({ x: e.target.value });
+    } else {
+      setInputRange({ y: e.target.value });
+    }
+  };
+
   //Reset form
   const handleCancel = () => {
     console.log("cancel");
+  };
+
+  const createPost = (e, fields, image, lastID) => {
+    e.preventDefault();
+
+    console.log("Ajout d un nouvelle article ID =>", lastID);
+
+    //calculate timeStamp to publish
+    const datePost = new Date();
+    const timeStampByDate = datePost.getTime(fields.date.current.input.value);
+    const hours = fields.hours.current.input.value * 360 * 1000;
+    const minutes = fields.minutes.current.input.value * 1000;
+    const timestampTopublish = timeStampByDate + hours + minutes;
+
+    const newID = lastID ? lastID : 0;
+    const inputs = {
+      userID: fields.userID.current,
+      activate: fields.active.current.input,
+      alt_FR: fields.alt_FR.current.input,
+      alt_EN: fields.alt_EN.current.input,
+      fr: {
+        title: fields.titleFR.current.input,
+        content: fields.contentFR.current.input,
+      },
+      en: {
+        title: fields.titleEN.current.input,
+        content: fields.contentEN.current.input,
+      },
+    };
+
+    console.log("controls input ", inputs.activate.checked);
+
+    //Brut data to article collection
+    const newPost = {
+      id: newID,
+      userID: inputs.userID.value,
+      activate: inputs.activate.checked,
+      alt_FR: inputs.alt_FR.value,
+      alt_EN: inputs.alt_EN.value,
+      base64: image.imageBase64,
+      en: {
+        title: inputs.en.title.value,
+        post: inputs.en.content.value,
+      },
+      fileName: image.name,
+      fr: {
+        title: inputs.fr.title.value,
+        post: inputs.fr.content.value,
+      },
+      height: image.height,
+      imagePath: `/assets/blog/posts/${newID}/${image.name}`,
+      timestamp: timestampTopublish,
+      uploadDir: `./public/assets/blog/posts/${newID}`,
+      width: image.width,
+      edited_By: false,
+    };
+
+    //Call APi to add Post
+
+    fetch("/api/post", {
+      method: "POST",
+      body: JSON.stringify(newPost),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        //stackOverflow : https://stackoverflow.com/questions/59163378/react-hooks-skip-re-render-on-multiple-consecutive-setstate-calls
+
+        setPosts({ items: result.newPosts, loading: false });
+        setParams((s) => ({ ...s, adminMenu: "Blog", adminSubMenu: false }));
+      });
+    /*
+    const response = await fetch("/api/post", {
+      method: "POST",
+      body: JSON.stringify(newPost),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const res = await response.json();
+    if (response.ok) {
+      setParams((s) => ({ ...s, adminMenu: "Blog", adminSubMenu: false }));
+    } else {
+      alert(JSON.stringify(responseData));
+    }*/
   };
 
   return (
@@ -363,7 +458,15 @@ export default function AddPost(props) {
               {!props.post ? (
                 <button
                   type="button"
-                  onClick={(e) => createPost(e, newPostRef, imageUpload, newID)}
+                  onClick={(e) => {
+                    createPost(
+                      e,
+                      newPostRef,
+                      imageUpload,
+                      newID,
+                      props.setParams
+                    );
+                  }}
                 >
                   Valider
                 </button>

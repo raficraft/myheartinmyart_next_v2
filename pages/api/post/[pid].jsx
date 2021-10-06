@@ -123,6 +123,25 @@ export default function handler(req, res) {
       for (let i = 0; i < collectionLength; i++) {
         const item = data[0].posts[i];
         item.id = i;
+
+        //And rewirte
+        //imagePath
+        //uploadDir
+
+        //Rename DIr
+        /*
+        const dirBlogImage = path.join(
+          process.cwd(),
+          "./public/assets/blog/posts/"
+        );
+  
+        const test = [];
+        fs.readdir(dirBlogImage, (err, files) => {
+          files.forEach((file) => {
+            console.log("gnnn :", file);
+            test.push(file);
+          });
+        });*/
       }
 
       console.log("yolo", currentPost[0].uploadDir);
@@ -143,10 +162,11 @@ export default function handler(req, res) {
       res.status(201).json({
         error: null,
         message: "Article supprimer avec succès",
-        newPosts: data,
+        newPosts: data[0].posts,
         console: {
           delID: deleteID,
           data: data,
+          test,
         },
       });
 
