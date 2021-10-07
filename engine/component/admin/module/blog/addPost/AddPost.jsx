@@ -5,7 +5,6 @@ import Tab from "./../../../../menu/tabSystem/Tab";
 import blogPreview from "../../../../../utils/js/blogPreview/blogPreview";
 import { debounce, getDateByTimeStamp } from "../../../../../utils/js/tools";
 import editPost from "../../../../../../pages/api/post/request/editPost";
-import { unstable_batchedUpdates } from "react-dom";
 
 export default function AddPost({
   length,
@@ -157,6 +156,7 @@ export default function AddPost({
         post: inputs.fr.content.value,
       },
       height: image.height,
+      imageName: image.name,
       imagePath: `/assets/blog/posts/${newID}/${image.name}`,
       timestamp: timestampTopublish,
       uploadDir: `./public/assets/blog/posts/${newID}`,
@@ -176,8 +176,6 @@ export default function AddPost({
     })
       .then((r) => r.json())
       .then((result) => {
-        //stackOverflow : https://stackoverflow.com/questions/59163378/react-hooks-skip-re-render-on-multiple-consecutive-setstate-calls
-
         setPosts({ items: result.newPosts, loading: false });
         setParams((s) => ({ ...s, adminMenu: "Blog", adminSubMenu: false }));
       });

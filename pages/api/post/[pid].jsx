@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import util from "util";
 
 /**
  * Read Specifique Article and Update or delete this.
@@ -111,62 +112,71 @@ export default function handler(req, res) {
 
       break;
 
-      break;
     case "DELETE":
       //Delete article
-      const deleteID = parseInt(pid);
-      data[0].posts.splice(deleteID, 1);
-
-      //Rewrite ID
+      let dataCopy = data[0].posts;
       const collectionLength = data[0].posts.length;
+      const deleteID = parseInt(pid);
 
       for (let i = 0; i < collectionLength; i++) {
-        const item = data[0].posts[i];
-        item.id = i;
+        const x = i === 0 ? 0 : i - 1;
+        const newImagePath = `/assets/blog/posts/${x}/${data[0].posts[i].imageName}`;
+        const newUploadDir = `./public/assets/blog/posts/${x}`;
 
-        //And rewirte
-        //imagePath
-        //uploadDir
+        if (i > deleteID) {
+          //copy by ref, redifine source
 
-        //Rename DIr
-        /*
-        const dirBlogImage = path.join(
-          process.cwd(),
-          "./public/assets/blog/posts/"
-        );
-  
-        const test = [];
-        fs.readdir(dirBlogImage, (err, files) => {
-          files.forEach((file) => {
-            console.log("gnnn :", file);
-            test.push(file);
+          fs.rename(data[0].posts[i].uploadDir, newUploadDir, function (err) {
+            if (err) {
+              console.log(err);
+              console.log("error renamed the directory new => .", newUploadDir);
+            }
           });
-        });*/
+
+          data[0].posts[i].id = x;
+          data[0].posts[i].imagePath = newImagePath;
+          data[0].posts[i].uploadDir = newUploadDir;
+        } else if (i === deleteID) {
+          fs.rename(
+            data[0].posts[i].uploadDir,
+            `./public/assets/blog/posts/${x}/tmp`,
+            function (err) {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(
+                  `Successfully renamed the directory => ./public/assets/blog/posts/${x}/tmp.`
+                );
+              }
+            }
+          );
+
+          fs.rmdir(
+            "./public/assets/blog/posts/tmp",
+            { recursive: true },
+            (err) => {
+              if (err) {
+                throw err;
+              }
+            }
+          );
+        }
       }
+
+      data[0].posts.splice(deleteID, 1);
 
       console.log("yolo", currentPost[0].uploadDir);
 
-      //Delete Dir to have illustration image
-      const deleteDir = path.join(process.cwd(), currentPost[0].uploadDir);
-      fs.rmdir(deleteDir, { recursive: true }, (err) => {
-        if (err) {
-          throw err;
-        }
-
-        console.log(`${deleteDir} is deleted!`);
-      });
-
-      // del Dir
-
       fs.writeFileSync(filePath, JSON.stringify(data));
+
       res.status(201).json({
         error: null,
         message: "Article supprimer avec succès",
-        newPosts: data[0].posts,
+        newPosts: dataCopy,
         console: {
           delID: deleteID,
-          data: data,
-          test,
+          editData: dataCopy,
+          srcData: data[0].posts,
         },
       });
 

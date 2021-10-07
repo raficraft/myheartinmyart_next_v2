@@ -43,6 +43,7 @@ export default function handler(req, res) {
         comment: [],
       },
       height: req.body.height,
+      imageName: req.body.imageName,
       imagePath: req.body.imagePath,
       timestamp: req.body.timestamp,
       uploadDir: req.body.uploadDir,
