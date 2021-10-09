@@ -12,7 +12,6 @@ export default function ParamsProvider({ children }) {
     adminMenu: "home",
     adminSubMenu: false,
     editId: false,
-    editData: false,
     user: {
       isAuth: true,
     },

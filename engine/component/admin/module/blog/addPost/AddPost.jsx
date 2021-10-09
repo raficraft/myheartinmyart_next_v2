@@ -4,17 +4,19 @@ import { Tabs } from "./../../../../menu/tabSystem/Tabs";
 import Tab from "./../../../../menu/tabSystem/Tab";
 import blogPreview from "../../../../../utils/js/blogPreview/blogPreview";
 import { debounce, getDateByTimeStamp } from "../../../../../utils/js/tools";
-import editPost from "../../../../../../pages/api/post/request/editPost";
+import { ParamsContext } from "../../../../../context/ParamsProvider";
 
 export default function AddPost({
+  editPost,
   length,
   title,
-  setParams,
   setPosts,
+  setParams,
   ...props
 }) {
   const [newID, setNewID] = useState({});
   useEffect(() => {
+    console.log(editPost);
     setNewID(length);
   }, []);
 
@@ -108,7 +110,7 @@ export default function AddPost({
     console.log("cancel");
   };
 
-  const createPost = (e, fields, image, lastID) => {
+  const createPost = async (e, fields, image, lastID) => {
     e.preventDefault();
 
     console.log("Ajout d un nouvelle article ID =>", lastID);
@@ -166,20 +168,6 @@ export default function AddPost({
 
     //Call APi to add Post
 
-    fetch("/api/post", {
-      method: "POST",
-      body: JSON.stringify(newPost),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((r) => r.json())
-      .then((result) => {
-        setPosts({ items: result.newPosts, loading: false });
-        setParams((s) => ({ ...s, adminMenu: "Blog", adminSubMenu: false }));
-      });
-    /*
     const response = await fetch("/api/post", {
       method: "POST",
       body: JSON.stringify(newPost),
@@ -190,10 +178,90 @@ export default function AddPost({
     });
     const res = await response.json();
     if (response.ok) {
-      setParams((s) => ({ ...s, adminMenu: "Blog", adminSubMenu: false }));
+      setPosts({ items: res.newPosts, loading: false });
+      setParams((s) => ({ ...s, adminMenu: "posts", adminSubMenu: false }));
     } else {
       alert(JSON.stringify(responseData));
-    }*/
+    }
+  };
+
+  const editPostValue = (e, fields, image, postId) => {
+    e.preventDefault();
+
+    //calculate timeStamp to publish
+    const datePost = new Date();
+    const timeStampByDate = datePost.getTime(fields.date.current.input.value);
+    const hours = fields.hours.current.input.value * 360 * 1000;
+    const minutes = fields.minutes.current.input.value * 1000;
+    const timestampTopublish = timeStampByDate + hours + minutes;
+
+    const inputs = {
+      userID: fields.userID.current,
+      activate: fields.active.current.input,
+      alt_FR: fields.alt_FR.current.input,
+      alt_EN: fields.alt_EN.current.input,
+      fr: {
+        title: fields.titleFR.current.input,
+        content: fields.contentFR.current.input,
+      },
+      en: {
+        title: fields.titleEN.current.input,
+        content: fields.contentEN.current.input,
+      },
+    };
+
+    let newPost = {};
+
+    //Brut data to article collection
+    const majPost = {
+      id: postId,
+      activate: inputs.activate.checked,
+      alt_FR: inputs.alt_FR.value,
+      alt_EN: inputs.alt_EN.value,
+      en: {
+        title: inputs.en.title.value,
+        post: inputs.en.content.value,
+      },
+      fr: {
+        title: inputs.fr.title.value,
+        post: inputs.fr.content.value,
+      },
+      timestamp: timestampTopublish,
+      update_date: Date.now(),
+      edited_By: inputs.userID.value,
+    };
+
+    //Image Control
+    if (image.imageBase64 !== "") {
+      const majImage = {
+        imagePath: `/assets/blog/posts/${postId}/${image.name}`,
+        base64: image.imageBase64,
+        fileName: image.name,
+        height: image.height,
+        width: image.width,
+        uploadDir: `./public/assets/blog/posts/${postId}`,
+      };
+
+      newPost = Object.assign({}, majPost, majImage);
+    } else {
+      newPost = majPost;
+    }
+
+    //Call APi to add Post
+    fetch(`/api/post/${postId}`, {
+      method: "POST",
+      body: JSON.stringify(newPost),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((r) => r.json())
+      .then((res) => {
+        console.log("Retour API après la modification d'un article", res);
+        setPosts({ items: res.newPosts, loading: false });
+        setParams((s) => ({ ...s, adminMenu: "posts", adminSubMenu: false }));
+      });
   };
 
   return (
@@ -202,8 +270,9 @@ export default function AddPost({
         <h1>{props.title}</h1>
       </header>
       <hr></hr>
-      <main className="form form_container-addPost">
-        <form className="form_addPost">
+
+      <form className="form form_container-addPost">
+        <div className="form_addPost">
           <input
             type="hidden"
             value="1"
@@ -214,7 +283,7 @@ export default function AddPost({
 
           <input
             type="hidden"
-            value={props.post ? props.post.fileName : ""}
+            value={editPost ? editPost.fileName : ""}
             id="image_filename"
             name="image_filename"
             ref={newPostRef.image_filename}
@@ -232,7 +301,7 @@ export default function AddPost({
                 }}
                 format="alphanumeric"
                 ref={newPostRef.titleFR}
-                default={props.post ? props.post.fr.title : ""}
+                default={editPost ? editPost.fr.title : ""}
               />
               <hr></hr>
               <InputBloc
@@ -246,7 +315,7 @@ export default function AddPost({
                 }}
                 ref={newPostRef.contentFR}
                 format="alphanumeric"
-                default={props.post ? props.post.fr.post : ""}
+                default={editPost ? editPost.fr.post : ""}
               />
             </Tab>
             <Tab title="Publication en EN" key="form_en">
@@ -261,7 +330,7 @@ export default function AddPost({
                 }}
                 ref={newPostRef.titleEN}
                 format="alphanumeric"
-                default={props.post ? props.post.en.title : ""}
+                default={editPost ? editPost.en.title : ""}
               />
               <hr></hr>
               <InputBloc
@@ -274,7 +343,7 @@ export default function AddPost({
                 }}
                 ref={newPostRef.contentEN}
                 format="alphanumeric"
-                default={props.post ? props.post.en.post : ""}
+                default={editPost ? editPost.en.post : ""}
               />
             </Tab>
             <Tab title="Image d'acceuil" key="form_image">
@@ -377,9 +446,9 @@ export default function AddPost({
               </section>
             </Tab>
           </Tabs>
-        </form>
+        </div>
 
-        <form className="form_params">
+        <div className="form_params">
           <InputBloc
             attr={{
               type: "date",
@@ -391,7 +460,7 @@ export default function AddPost({
             ref={newPostRef.date}
             format="date"
             default={
-              props.post ? getDateByTimeStamp(props.post.timestamp, "date") : ""
+              editPost ? getDateByTimeStamp(editPost.timestamp, "date") : ""
             }
           />
           <hr></hr>
@@ -409,8 +478,8 @@ export default function AddPost({
               ref={newPostRef.hours}
               format="numeric"
               default={
-                props.post
-                  ? getDateByTimeStamp(props.post.timestamp, "timer").hours
+                editPost
+                  ? getDateByTimeStamp(editPost.timestamp, "timer").hours
                   : ""
               }
             />
@@ -428,8 +497,8 @@ export default function AddPost({
               ref={newPostRef.minutes}
               format="numeric"
               default={
-                props.post
-                  ? getDateByTimeStamp(props.post.timestamp, "timer").min
+                editPost
+                  ? getDateByTimeStamp(editPost.timestamp, "timer").min
                   : ""
               }
             />
@@ -442,9 +511,7 @@ export default function AddPost({
                 forhtml: "active_publish",
               }}
               ref={newPostRef.active}
-              checked={
-                props.post && props.post.activate === true ? true : false
-              }
+              checked={editPost && editPost.activate === true ? true : false}
             />
           </div>
 
@@ -453,7 +520,7 @@ export default function AddPost({
               <button type="button" onClick={handleCancel}>
                 Annuler
               </button>
-              {!props.post ? (
+              {!editPost ? (
                 <button
                   type="button"
                   onClick={(e) => {
@@ -472,7 +539,7 @@ export default function AddPost({
                 <button
                   type="button"
                   onClick={(e) =>
-                    editPost(e, newPostRef, imageUpload, props.post.id)
+                    editPostValue(e, newPostRef, imageUpload, editPost.id)
                   }
                 >
                   Modifier
@@ -480,8 +547,8 @@ export default function AddPost({
               )}
             </div>
           </footer>
-        </form>
-      </main>
+        </div>
+      </form>
     </section>
   );
 }

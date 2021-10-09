@@ -20,7 +20,7 @@ export default function CreateCard({
   };
 
   return array
-    .filter((post, key) => condition(filterBy, post))
+    .filter((post, k) => condition(filterBy, post))
     .map((post, key) => {
       {
         return (
@@ -74,7 +74,7 @@ export default function CreateCard({
               </div>
             </div>
             <footer>
-              <button type="button" onClick={showEditModule}>
+              <button type="button" onClick={(e) => showEditModule(e, post.id)}>
                 Edit
               </button>
               {post.activate ? (

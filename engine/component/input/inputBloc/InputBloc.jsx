@@ -1,30 +1,31 @@
-import React, { useRef, useImperativeHandle, forwardRef } from "react";
+import React, {
+  useRef,
+  useImperativeHandle,
+  forwardRef,
+  useContext,
+} from "react";
 import { validInput } from "../../../utils/js/form/validInput";
-import manageLocalStorage from "../../../utils/js/manageLocalStorage/manageLocalStorage";
+import { ParamsContext } from "./../../../context/ParamsProvider";
 import { debounce } from "./../../../utils/js/tools";
+import manageLocalStorage from "../../../utils/js/manageLocalStorage/manageLocalStorage";
 
 //forwardRef => pass refs from child to parent
 export let InputBloc = (props, ref) => {
+  const [params, setParams] = useContext(ParamsContext);
   const { forhtml, label, type, format = null, checked } = props.attr;
-
   const inputRef = useRef();
   const errorMessage = useRef(null);
 
-  const controlCapture = debounce((params) => {
+  console.log("paramsContext in INPUT : ", params);
+
+  const controlCapture = debounce((e) => {
     console.log("control capture");
     console.log(validInput(ref));
     errorMessage.current.textContent = validInput(ref);
 
-    //Break 17/09/21 23h
-    // Essayez d'excuter plusieurs fonctions dans un seul
-    // handle
-    // ManageLocalStorage à remonté dans addBlog
-    // Pour gérer la sauvegarde de saisie des données
-
     manageLocalStorage({
-      collection: params.collection,
-      value: params.value,
-      fields: params.fields,
+      params,
+      ref,
     });
   }, 300);
 
@@ -45,7 +46,7 @@ export let InputBloc = (props, ref) => {
     for (const key in attr) {
       if (Object.hasOwnProperty.call(attr, key)) {
         const element = attr[key];
-      /*
+        /*
         console.log("element :", element);
         console.log("key :", key);*/
 
@@ -61,6 +62,10 @@ export let InputBloc = (props, ref) => {
     }
 
     return attrRes;
+  };
+
+  const toto = () => {
+    console.log("toto");
   };
 
   const constructElement = () => {
@@ -88,9 +93,10 @@ export let InputBloc = (props, ref) => {
               className={`textarea-${forhtml}`}
               {...createAttr(props.attr)}
               ref={inputRef}
-              onChange={controlCapture}
+              onChange={(e) => controlCapture(e)}
               data-format={props.format}
               defaultValue={props.default}
+              onKeyUp={toto}
             ></textarea>
           );
         } else {

@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import util from "util";
 
 /**
  * Read Specifique Article and Update or delete this.
@@ -19,6 +18,7 @@ export default function handler(req, res) {
   const data = JSON.parse(fileData);
   const { pid } = req.query;
   const currentPost = data[0].posts.filter((post) => post.id === parseInt(pid));
+  console.log("he ho ", data[0].posts);
   const reqBody = req.body;
 
   switch (req.method) {
@@ -60,14 +60,20 @@ export default function handler(req, res) {
       let reject = {};
 
       //Create Maj
+
       for (const iterator of currentKey) {
+        // if the data key call change value
         if (reqBody[iterator]) {
           majPost[iterator] = reqBody[iterator];
+
+          //If transmit value is empty or undefined
+          // Add in reject array and apply default value
+          if (reqBody[iterator] === "" || reqBody[iterator] === "undefined") {
+            reject[iterator] = reqBody[iterator];
+            majPost[iterator] = currentPost[0][iterator];
+          }
         } else {
-          majPost[iterator] = currentPost[0][iterator];
-        }
-        if (reqBody[iterator] === "" || reqBody[iterator] === "undefined") {
-          reject[iterator] = reqBody[iterator];
+          //else apply original value
           majPost[iterator] = currentPost[0][iterator];
         }
       }
@@ -79,39 +85,53 @@ export default function handler(req, res) {
       fs.writeFileSync(filePath, JSON.stringify(data));
 
       //Create File
-
-      const imagePath = `${reqBody.uploadDir}/${reqBody.fileName}`;
-
-      fs.mkdir(reqBody.uploadDir, { recursive: true }, (err) => {
-        let base64String = reqBody.base64; // Not a real image
-
-        //Vider le repertoire
-
-        let base64Image = base64String.split(";base64,").pop();
-        fs.writeFile(
-          imagePath,
-          base64Image,
-          { encoding: "base64" },
-          function (err) {
-            console.log("File created");
-          }
+      if (reqBody.imageBase64) {
+        const imagePath = path.join(
+          process.cwd(),
+          `${reqBody.uploadDir}/${reqBody.fileName}`
         );
-      });
+        const uploadDir = path.join(process.cwd(), reqBody.uploadDir);
+
+        fs.mkdir(uploadDir, { recursive: true }, (err) => {
+          let base64String = reqBody.base64; // Not a real image
+
+          //Vider le repertoire
+
+          let base64Image = base64String.split(";base64,").pop();
+          fs.writeFile(
+            imagePath,
+            base64Image,
+            { encoding: "base64" },
+            function (err) {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log("File created");
+              }
+            }
+          );
+        });
+      }
 
       res.status(201).json({
         log: "yellow",
-        post: currentPost[0],
+        newPosts: data[0].posts,
         body: reqBody,
         key: currentKey,
         res: majPost,
         reject,
-        bdd: data[0].posts[idKey],
+        result: data[0].posts[idKey],
         error: null,
         message: "Article Modifié avec succés",
       });
+      /*
+      res.status(201).json({
+        log: { currentPost, body: req.body, pid: pid },
+      });*/
 
       break;
 
+      break;
     case "DELETE":
       //Delete article
       let dataCopy = data[0].posts;
@@ -129,7 +149,20 @@ export default function handler(req, res) {
           fs.rename(data[0].posts[i].uploadDir, newUploadDir, function (err) {
             if (err) {
               console.log(err);
+              console.log(
+                "error renamed the directory old => .",
+                data[0].posts[i].uploadDir
+              );
               console.log("error renamed the directory new => .", newUploadDir);
+            } else {
+              console.log(
+                "Successfully renamed the directory old => .",
+                data[0].posts[i].uploadDir
+              );
+              console.log(
+                "Successfully renamed the directory new => .",
+                newUploadDir
+              );
             }
           });
 
@@ -139,24 +172,22 @@ export default function handler(req, res) {
         } else if (i === deleteID) {
           fs.rename(
             data[0].posts[i].uploadDir,
-            `./public/assets/blog/posts/${x}/tmp`,
+            `./public/assets/blog/posts/tmp`,
             function (err) {
               if (err) {
                 console.log(err);
               } else {
-                console.log(
-                  `Successfully renamed the directory => ./public/assets/blog/posts/${x}/tmp.`
+                console.log("Successfully renamed the directory.");
+                fs.rmdir(
+                  "./public/assets/blog/posts/tmp",
+                  { recursive: true },
+                  (err) => {
+                    if (err) {
+                      throw err;
+                    }
+                    console.log(`'./public/assets/blog/posts/tmp' is deleted!`);
+                  }
                 );
-              }
-            }
-          );
-
-          fs.rmdir(
-            "./public/assets/blog/posts/tmp",
-            { recursive: true },
-            (err) => {
-              if (err) {
-                throw err;
               }
             }
           );
@@ -172,7 +203,7 @@ export default function handler(req, res) {
       res.status(201).json({
         error: null,
         message: "Article supprimer avec succès",
-        newPosts: dataCopy,
+        newPosts: data[0].posts,
         console: {
           delID: deleteID,
           editData: dataCopy,

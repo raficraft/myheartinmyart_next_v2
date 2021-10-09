@@ -16,13 +16,13 @@ export default function AdminContainer() {
   const router = useRouter();
   const { params, setParams } = useContext(ParamsContext);
 
-  const adminContainer = () => {
+  const adminContent = () => {
     console.log("params admin menu : ", params);
 
     switch (params.adminMenu) {
       case "User":
         return <AdminUser />;
-      case "Blog":
+      case "posts":
         return <AdminBlog></AdminBlog>;
       case "Gallery":
         return <AdminGallery />;
@@ -36,7 +36,7 @@ export default function AdminContainer() {
   return (
     <div className="admin_container" data-animate={params.admin}>
       <AdminLeftPanel />
-      {adminContainer()}
+      {adminContent()}
     </div>
   );
 }

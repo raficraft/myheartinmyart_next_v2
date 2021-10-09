@@ -19,6 +19,7 @@ export default function AdminBlog(props) {
   console.log("POSTS ON_LOAD : ", posts.length);
 
   useEffect(() => {
+    console.log("onLoad view params : ", params);
     if (!loadingPost) {
       switch (params.adminSubMenu) {
         //Add Page Module
@@ -28,26 +29,29 @@ export default function AdminBlog(props) {
             <AddPost
               length={posts.length}
               title={"Nouveau billet de blog"}
-              setParams={setParams}
               setPosts={setPosts}
-            />
+              setParams={setParams}
+            >
+              {/** I want this  content bloc  */}
+            </AddPost>
           );
           break;
 
         //Edit Post Module
         case "editPost":
-          if (params.editId) {
-            setAdminContent(
-              <AddPost
-                post={posts[params.editId]}
-                title={"Modification d'un billet de blog"}
-                setPosts={setPosts}
-                setParams={setParams}
-              ></AddPost>
-            );
-          } else {
-            alert("params editId undefined");
-          }
+          console.log("trop lol", params);
+
+          console.log("hahahahah", params.editId);
+          console.log("hahahahah", posts);
+          console.log("hahahahah", posts[params.editId]);
+          setAdminContent(
+            <AddPost
+              editPost={posts[params.editId]}
+              title={"Modification d'un billet de blog"}
+              setPosts={setPosts}
+              setParams={setParams}
+            ></AddPost>
+          );
 
           break;
 
@@ -58,11 +62,14 @@ export default function AdminBlog(props) {
           //Go to Edit pages
           console.log("props admincardlisting", props);
 
-          const showEditModule = (postId) => {
+          const showEditModule = (e, postId) => {
             console.log("click");
-            console.log(props.id);
-            const newContext = { adminSubMenu: "editPost", editData: props };
-            setParams(Object.assign({}, params, newContext));
+            console.log(postId);
+            setParams((s) => ({
+              ...s,
+              adminSubMenu: "editPost",
+              editId: postId,
+            }));
           };
 
           const putPost = (e, params) => {

@@ -5,14 +5,18 @@ export default function AdminLeftPanel() {
   const { params, setParams } = useContext(ParamsContext);
 
   const toggleAdmin = (e, menu) => {
-    const newState = { adminMenu: menu, adminSubMenu: "" };
-    setParams(Object.assign({}, params, newState));
+    setParams((s) => ({
+      ...s,
+      adminMenu: menu,
+      adminSubMenu: "",
+      editId: false,
+    }));
   };
 
   const toggleSubAdmin = (e, menu) => {
     e.stopPropagation();
-    const newState = { adminSubMenu: menu };
-    setParams(Object.assign({}, params, newState));
+    console.log("toto le rigolo");
+    setParams((s) => ({ ...s, adminSubMenu: menu, editId: false }));
   };
 
   return (
@@ -41,7 +45,7 @@ export default function AdminLeftPanel() {
         <li
           className="accordion-item"
           id="blog"
-          onClick={(e) => toggleAdmin(e, "Blog")}
+          onClick={(e) => toggleAdmin(e, "posts")}
         >
           <a href="#blog" className="accordion-btn">
             Blog

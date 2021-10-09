@@ -1,5 +1,5 @@
 export default function manageLocalStorage(params) {
-  console.log("tartampion de chine");
+  console.log("Gestion du loaclStorage : ", params);
 
   return null;
 }

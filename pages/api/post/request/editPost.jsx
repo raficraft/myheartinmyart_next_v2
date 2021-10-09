@@ -1,9 +1,6 @@
 export default function editPost(e, fields, image, postId) {
   e.preventDefault();
 
-  console.log(fields);
-  console.log("default image : ", image);
-
   //calculate timeStamp to publish
   const datePost = new Date();
   const timeStampByDate = datePost.getTime(fields.date.current.input.value);
@@ -25,10 +22,6 @@ export default function editPost(e, fields, image, postId) {
       content: fields.contentEN.current.input,
     },
   };
-
-  console.log(postId);
-
-  console.log("controls input ", inputs.activate.checked);
 
   let newPost = {};
 
@@ -67,7 +60,7 @@ export default function editPost(e, fields, image, postId) {
     newPost = majPost;
   }
 
-  //Call APi to add Post
+  //Call APi to edit Post
   fetch(`/api/post/${postId}`, {
     method: "POST",
     body: JSON.stringify(newPost),
@@ -78,7 +71,7 @@ export default function editPost(e, fields, image, postId) {
   })
     .then((r) => r.json())
     .then((result) => {
-      console.log("push json", result);
+      console.log("Retour API après la modification d'un article", result);
       return result;
     });
 }
